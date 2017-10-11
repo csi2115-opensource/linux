@@ -339,12 +339,15 @@ static int qrtr_node_enqueue(struct qrtr_node *node, struct sk_buff *skb,
 	size_t len = skb->len;
 	int rc, confirm_rx;
 
+<<<<<<< HEAD
 	confirm_rx = qrtr_tx_wait(node, to->sq_node, to->sq_port, type);
 	if (confirm_rx < 0) {
 		kfree_skb(skb);
 		return confirm_rx;
 	}
 
+=======
+>>>>>>> 194ccc88297a... net: qrtr: Support decoding incoming v2 packets
 	hdr = skb_push(skb, sizeof(*hdr));
 	hdr->version = cpu_to_le32(QRTR_PROTO_VER_1);
 	hdr->type = cpu_to_le32(type);
@@ -429,6 +432,7 @@ int qrtr_endpoint_post(struct qrtr_endpoint *ep, const void *data, size_t len)
 	struct qrtr_node *node = ep->node;
 	const struct qrtr_hdr_v1 *v1;
 	const struct qrtr_hdr_v2 *v2;
+<<<<<<< HEAD
 	struct qrtr_sock *ipc;
 	struct sk_buff *skb;
 	struct qrtr_cb *cb;
@@ -437,6 +441,15 @@ int qrtr_endpoint_post(struct qrtr_endpoint *ep, const void *data, size_t len)
 	size_t hdrlen;
 
 	if (len == 0 || len & 3)
+=======
+	struct sk_buff *skb;
+	struct qrtr_cb *cb;
+	unsigned int size;
+	unsigned int ver;
+	size_t hdrlen;
+
+	if (len & 3)
+>>>>>>> 194ccc88297a... net: qrtr: Support decoding incoming v2 packets
 		return -EINVAL;
 
 	skb = netdev_alloc_skb(NULL, len);
@@ -450,8 +463,11 @@ int qrtr_endpoint_post(struct qrtr_endpoint *ep, const void *data, size_t len)
 
 	switch (ver) {
 	case QRTR_PROTO_VER_1:
+<<<<<<< HEAD
 		if (len < sizeof(*v1))
 			goto err;
+=======
+>>>>>>> 194ccc88297a... net: qrtr: Support decoding incoming v2 packets
 		v1 = data;
 		hdrlen = sizeof(*v1);
 
@@ -465,8 +481,11 @@ int qrtr_endpoint_post(struct qrtr_endpoint *ep, const void *data, size_t len)
 		size = le32_to_cpu(v1->size);
 		break;
 	case QRTR_PROTO_VER_2:
+<<<<<<< HEAD
 		if (len < sizeof(*v2))
 			goto err;
+=======
+>>>>>>> 194ccc88297a... net: qrtr: Support decoding incoming v2 packets
 		v2 = data;
 		hdrlen = sizeof(*v2) + v2->optlen;
 
@@ -492,9 +511,16 @@ int qrtr_endpoint_post(struct qrtr_endpoint *ep, const void *data, size_t len)
 	if (len != ALIGN(size, 4) + hdrlen)
 		goto err;
 
+<<<<<<< HEAD
 	if (cb->dst_port != QRTR_PORT_CTRL && cb->type != QRTR_TYPE_DATA &&
 	    cb->type != QRTR_TYPE_RESUME_TX)
 		goto err;
+=======
+	if (cb->dst_port != QRTR_PORT_CTRL && cb->type != QRTR_TYPE_DATA)
+		goto err;
+
+	skb_put_data(skb, data + hdrlen, size);
+>>>>>>> 194ccc88297a... net: qrtr: Support decoding incoming v2 packets
 
 	skb_put_data(skb, data + hdrlen, size);
 
@@ -545,7 +571,11 @@ static struct sk_buff *qrtr_alloc_ctrl_packet(struct qrtr_ctrl_pkt **pkt,
 	const int pkt_len = sizeof(struct qrtr_ctrl_pkt);
 	struct sk_buff *skb;
 
+<<<<<<< HEAD
 	skb = alloc_skb(QRTR_HDR_MAX_SIZE + pkt_len, flags);
+=======
+	skb = alloc_skb(QRTR_HDR_MAX_SIZE + pkt_len, GFP_KERNEL);
+>>>>>>> 194ccc88297a... net: qrtr: Support decoding incoming v2 packets
 	if (!skb)
 		return NULL;
 
