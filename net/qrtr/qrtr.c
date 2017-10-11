@@ -509,45 +509,11 @@ int qrtr_endpoint_post(struct qrtr_endpoint *ep, const void *data, size_t len)
 	skb_put_data(skb, data + hdrlen, size);
 
 	qrtr_node_assign(node, cb->src_node);
-=======
 
-	switch (ver) {
-	case QRTR_PROTO_VER_1:
-		v1 = data;
-		hdrlen = sizeof(*v1);
+	cb = (struct qrtr_cb *)skb->cb;
 
-		cb->type = le32_to_cpu(v1->type);
-		cb->src_node = le32_to_cpu(v1->src_node_id);
-		cb->src_port = le32_to_cpu(v1->src_port_id);
-		cb->confirm_rx = !!v1->confirm_rx;
-		cb->dst_node = le32_to_cpu(v1->dst_node_id);
-		cb->dst_port = le32_to_cpu(v1->dst_port_id);
-
-		size = le32_to_cpu(v1->size);
-		break;
-	case QRTR_PROTO_VER_2:
-		v2 = data;
-		hdrlen = sizeof(*v2) + v2->optlen;
-
-		cb->type = v2->type;
-		cb->confirm_rx = !!(v2->flags & QRTR_FLAGS_CONFIRM_RX);
-		cb->src_node = le16_to_cpu(v2->src_node_id);
-		cb->src_port = le16_to_cpu(v2->src_port_id);
-		cb->dst_node = le16_to_cpu(v2->dst_node_id);
-		cb->dst_port = le16_to_cpu(v2->dst_port_id);
-
-		if (cb->src_port == (u16)QRTR_PORT_CTRL)
-			cb->src_port = QRTR_PORT_CTRL;
-		if (cb->dst_port == (u16)QRTR_PORT_CTRL)
-			cb->dst_port = QRTR_PORT_CTRL;
-
-		size = le32_to_cpu(v2->size);
-		break;
-	default:
-		pr_err("qrtr: Invalid version %d\n", ver);
-		goto err;
-	}
-=======
+	/* Version field in v1 is little endian, so this works for both cases */
+	ver = *(u8*)data;
 
 	switch (ver) {
 	case QRTR_PROTO_VER_1:
@@ -593,7 +559,80 @@ int qrtr_endpoint_post(struct qrtr_endpoint *ep, const void *data, size_t len)
 		goto err;
 
 	skb_put_data(skb, data + hdrlen, size);
->>>>>>> 194ccc88297a... net: qrtr: Support decoding incoming v2 packets
+
+	switch (ver) {
+	case QRTR_PROTO_VER_1:
+		v1 = data;
+		hdrlen = sizeof(*v1);
+
+		cb->type = le32_to_cpu(v1->type);
+		cb->src_node = le32_to_cpu(v1->src_node_id);
+		cb->src_port = le32_to_cpu(v1->src_port_id);
+		cb->confirm_rx = !!v1->confirm_rx;
+		cb->dst_node = le32_to_cpu(v1->dst_node_id);
+		cb->dst_port = le32_to_cpu(v1->dst_port_id);
+
+		size = le32_to_cpu(v1->size);
+		break;
+	case QRTR_PROTO_VER_2:
+		v2 = data;
+		hdrlen = sizeof(*v2) + v2->optlen;
+
+		cb->type = v2->type;
+		cb->confirm_rx = !!(v2->flags & QRTR_FLAGS_CONFIRM_RX);
+		cb->src_node = le16_to_cpu(v2->src_node_id);
+		cb->src_port = le16_to_cpu(v2->src_port_id);
+		cb->dst_node = le16_to_cpu(v2->dst_node_id);
+		cb->dst_port = le16_to_cpu(v2->dst_port_id);
+
+		if (cb->src_port == (u16)QRTR_PORT_CTRL)
+			cb->src_port = QRTR_PORT_CTRL;
+		if (cb->dst_port == (u16)QRTR_PORT_CTRL)
+			cb->dst_port = QRTR_PORT_CTRL;
+
+		size = le32_to_cpu(v2->size);
+		break;
+	default:
+		pr_err("qrtr: Invalid version %d\n", ver);
+		goto err;
+	}
+
+	switch (ver) {
+	case QRTR_PROTO_VER_1:
+		v1 = data;
+		hdrlen = sizeof(*v1);
+
+		cb->type = le32_to_cpu(v1->type);
+		cb->src_node = le32_to_cpu(v1->src_node_id);
+		cb->src_port = le32_to_cpu(v1->src_port_id);
+		cb->confirm_rx = !!v1->confirm_rx;
+		cb->dst_node = le32_to_cpu(v1->dst_node_id);
+		cb->dst_port = le32_to_cpu(v1->dst_port_id);
+
+		size = le32_to_cpu(v1->size);
+		break;
+	case QRTR_PROTO_VER_2:
+		v2 = data;
+		hdrlen = sizeof(*v2) + v2->optlen;
+
+		cb->type = v2->type;
+		cb->confirm_rx = !!(v2->flags & QRTR_FLAGS_CONFIRM_RX);
+		cb->src_node = le16_to_cpu(v2->src_node_id);
+		cb->src_port = le16_to_cpu(v2->src_port_id);
+		cb->dst_node = le16_to_cpu(v2->dst_node_id);
+		cb->dst_port = le16_to_cpu(v2->dst_port_id);
+
+		if (cb->src_port == (u16)QRTR_PORT_CTRL)
+			cb->src_port = QRTR_PORT_CTRL;
+		if (cb->dst_port == (u16)QRTR_PORT_CTRL)
+			cb->dst_port = QRTR_PORT_CTRL;
+
+		size = le32_to_cpu(v2->size);
+		break;
+	default:
+		pr_err("qrtr: Invalid version %d\n", ver);
+		goto err;
+	}
 
 	if (len != ALIGN(size, 4) + hdrlen)
 		goto err;
@@ -602,7 +641,14 @@ int qrtr_endpoint_post(struct qrtr_endpoint *ep, const void *data, size_t len)
 		goto err;
 
 	skb_put_data(skb, data + hdrlen, size);
->>>>>>> 194ccc88297a... net: qrtr: Support decoding incoming v2 packets
+
+	if (len != ALIGN(size, 4) + hdrlen)
+		goto err;
+
+	if (cb->dst_port != QRTR_PORT_CTRL && cb->type != QRTR_TYPE_DATA)
+		goto err;
+
+	skb_put_data(skb, data + hdrlen, size);
 
 	if (cb->type == QRTR_TYPE_NEW_SERVER) {
 		/* Remote node endpoint can bridge other distant nodes */
@@ -649,19 +695,11 @@ static struct sk_buff *qrtr_alloc_ctrl_packet(struct qrtr_ctrl_pkt **pkt,
 	const int pkt_len = sizeof(struct qrtr_ctrl_pkt);
 	struct sk_buff *skb;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	skb = alloc_skb(QRTR_HDR_MAX_SIZE + pkt_len, flags);
-=======
 	skb = alloc_skb(QRTR_HDR_MAX_SIZE + pkt_len, GFP_KERNEL);
->>>>>>> 194ccc88297a... net: qrtr: Support decoding incoming v2 packets
-=======
 	skb = alloc_skb(QRTR_HDR_MAX_SIZE + pkt_len, GFP_KERNEL);
->>>>>>> 194ccc88297a... net: qrtr: Support decoding incoming v2 packets
-=======
 	skb = alloc_skb(QRTR_HDR_MAX_SIZE + pkt_len, GFP_KERNEL);
->>>>>>> 194ccc88297a... net: qrtr: Support decoding incoming v2 packets
+	skb = alloc_skb(QRTR_HDR_MAX_SIZE + pkt_len, GFP_KERNEL);
 	if (!skb)
 		return NULL;
 
