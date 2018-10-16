@@ -1862,13 +1862,21 @@ static int mlx5e_set_tx_maxrate(struct net_device *dev, int index, u32 rate)
 
 void mlx5e_build_create_cq_param(struct mlx5e_create_cq_param *ccp, struct mlx5e_channel *c)
 {
-	*ccp = (struct mlx5e_create_cq_param) {
-		.napi = &c->napi,
-		.ch_stats = c->stats,
-		.node = cpu_to_node(c->cpu),
-		.ix = c->ix,
-	};
-}
+	struct net_dim_cq_moder icocq_moder = {0, 0};
+	struct net_device *netdev = priv->netdev;
+	int cpu = mlx5e_get_cpu(priv, ix);
+	struct mlx5e_channel *c;
+	unsigned int irq;
+	int err;
+	int eqn;
+
+	err = mlx5_vector2eqn(priv->mdev, ix, &eqn, &irq);
+	if (err)
+		return err;
+
+	c = kvzalloc_node(sizeof(*c), GFP_KERNEL, cpu_to_node(cpu));
+	if (!c)
+		return -ENOMEM;
 
 static int mlx5e_open_queues(struct mlx5e_channel *c,
 			     struct mlx5e_params *params,
@@ -1878,7 +1886,7 @@ static int mlx5e_open_queues(struct mlx5e_channel *c,
 	struct mlx5e_create_cq_param ccp;
 	int err;
 
-	mlx5e_build_create_cq_param(&ccp, c);
+	c->irq_desc = irq_to_desc(irq);
 
 	err = mlx5e_open_cq(c->priv, icocq_moder, &cparam->async_icosq.cqp, &ccp,
 			    &c->async_icosq.cq);
@@ -5557,8 +5565,7 @@ static void mlx5e_update_features(struct net_device *netdev)
 
 int mlx5e_attach_netdev(struct mlx5e_priv *priv)
 {
-	const bool take_rtnl = priv->netdev->reg_state == NETREG_REGISTERED;
-	const struct mlx5e_profile *profile = priv->profile;
+	const struct mlx5e_profile *profile;
 	int max_nch;
 	int err;
 
@@ -5568,27 +5575,10 @@ int mlx5e_attach_netdev(struct mlx5e_priv *priv)
 	max_nch = mlx5e_get_max_num_channels(priv->mdev);
 	if (priv->channels.params.num_channels > max_nch) {
 		mlx5_core_warn(priv->mdev, "MLX5E: Reducing number of channels to %d\n", max_nch);
-		/* Reducing the number of channels - RXFH has to be reset, and
-		 * mlx5e_num_channels_changed below will build the RQT.
-		 */
-		priv->netdev->priv_flags &= ~IFF_RXFH_CONFIGURED;
 		priv->channels.params.num_channels = max_nch;
+		mlx5e_build_default_indir_rqt(priv->channels.params.indirection_rqt,
+					      MLX5E_INDIR_RQT_SIZE, max_nch);
 	}
-	/* 1. Set the real number of queues in the kernel the first time.
-	 * 2. Set our default XPS cpumask.
-	 * 3. Build the RQT.
-	 *
-	 * rtnl_lock is required by netif_set_real_num_*_queues in case the
-	 * netdev has been registered by this point (if this function was called
-	 * in the reload or resume flow).
-	 */
-	if (take_rtnl)
-		rtnl_lock();
-	err = mlx5e_num_channels_changed(priv);
-	if (take_rtnl)
-		rtnl_unlock();
-	if (err)
-		goto out;
 
 	err = profile->init_tx(priv);
 	if (err)
