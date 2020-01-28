@@ -93,6 +93,7 @@ out_unlock:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 /**
  * gfs2_freeze_lock - hold the freeze glock
  * @sdp: the superblock
@@ -129,6 +130,8 @@ static void signal_our_withdraw(struct gfs2_sbd *sdp)
 =======
 =======
 >>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
+=======
+>>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 static void signal_our_withdraw(struct gfs2_sbd *sdp)
 {
 	struct gfs2_glock *gl = sdp->sd_live_gh.gh_gl;
@@ -136,6 +139,9 @@ static void signal_our_withdraw(struct gfs2_sbd *sdp)
 	struct gfs2_inode *ip = GFS2_I(inode);
 	u64 no_formal_ino = ip->i_no_formal_ino;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
+=======
 >>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 =======
 >>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
@@ -159,6 +165,7 @@ static void signal_our_withdraw(struct gfs2_sbd *sdp)
 	 * therefore we need to clear SDF_JOURNAL_LIVE manually.
 	 */
 	clear_bit(SDF_JOURNAL_LIVE, &sdp->sd_flags);
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	if (!sb_rdonly(sdp->sd_vfs)) {
@@ -193,6 +200,11 @@ static void signal_our_withdraw(struct gfs2_sbd *sdp)
 		ret = gfs2_make_fs_ro(sdp);
 
 >>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
+=======
+	if (!sb_rdonly(sdp->sd_vfs))
+		ret = gfs2_make_fs_ro(sdp);
+
+>>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 	/*
 	 * Drop the glock for our journal so another node can recover it.
 	 */
@@ -206,6 +218,7 @@ static void signal_our_withdraw(struct gfs2_sbd *sdp)
 		/* Make sure gfs2_unfreeze works if partially-frozen */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		flush_work(&sdp->sd_freeze_work);
 		atomic_set(&sdp->sd_freeze_state, SFS_FROZEN);
 		thaw_super(sdp->sd_vfs);
@@ -215,12 +228,17 @@ static void signal_our_withdraw(struct gfs2_sbd *sdp)
 =======
 =======
 >>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
+=======
+>>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 		flush_workqueue(gfs2_freeze_wq);
 		atomic_set(&sdp->sd_freeze_state, SFS_FROZEN);
 		thaw_super(sdp->sd_vfs);
 	} else {
 		wait_on_bit(&gl->gl_flags, GLF_DEMOTE, TASK_UNINTERRUPTIBLE);
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
+=======
 >>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 =======
 >>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
@@ -245,6 +263,7 @@ static void signal_our_withdraw(struct gfs2_sbd *sdp)
 	 */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (i_gl->gl_ops->go_free) {
 		set_bit(GLF_FREEING, &i_gl->gl_flags);
 		wait_on_bit(&i_gl->gl_flags, GLF_FREEING, TASK_UNINTERRUPTIBLE);
@@ -255,6 +274,8 @@ static void signal_our_withdraw(struct gfs2_sbd *sdp)
 	 */
 	gfs2_glock_hold(live_gl);
 =======
+=======
+>>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 =======
 >>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 	if (gl->gl_ops->go_free) {
@@ -271,6 +292,9 @@ static void signal_our_withdraw(struct gfs2_sbd *sdp)
 	 */
 	gfs2_glock_hold(gl);
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
+=======
 >>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 =======
 >>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
@@ -314,7 +338,11 @@ static void signal_our_withdraw(struct gfs2_sbd *sdp)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	gfs2_glock_queue_put(live_gl); /* drop extra reference we acquired */
+=======
+	gfs2_glock_queue_put(gl); /* drop the extra reference we acquired */
+>>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 =======
 	gfs2_glock_queue_put(gl); /* drop the extra reference we acquired */
 >>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
@@ -349,7 +377,11 @@ static void signal_our_withdraw(struct gfs2_sbd *sdp)
 	for (tries = 0; tries < 10; tries++) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		ret = check_journal_clean(sdp, sdp->sd_jdesc, false);
+=======
+		ret = check_journal_clean(sdp, sdp->sd_jdesc);
+>>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 =======
 		ret = check_journal_clean(sdp, sdp->sd_jdesc);
 >>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish

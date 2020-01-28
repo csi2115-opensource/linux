@@ -227,7 +227,10 @@ struct gfs2_glock_operations {
 	void (*go_free)(struct gfs2_glock *gl);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	const int go_subclass;
+=======
+>>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 =======
 >>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 =======
@@ -339,6 +342,9 @@ enum {
 =======
 	GLF_INODE_CREATING		= 16, /* Inode creation occurring */
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
+=======
 >>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 =======
 >>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
