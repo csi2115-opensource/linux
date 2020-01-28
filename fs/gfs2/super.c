@@ -626,6 +626,9 @@ int gfs2_make_fs_ro(struct gfs2_sbd *sdp)
 	flush_workqueue(gfs2_delete_workqueue);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
+=======
 >>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 =======
 >>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
@@ -649,7 +652,10 @@ int gfs2_make_fs_ro(struct gfs2_sbd *sdp)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 =======
 >>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 =======

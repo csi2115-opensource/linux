@@ -255,7 +255,11 @@ int gfs2_meta_read(struct gfs2_glock *gl, u64 blkno, int flags,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    (!sdp->sd_jdesc || gl != sdp->sd_jinode_gl)) {
+=======
+	    (!sdp->sd_jdesc || (blkno != sdp->sd_jdesc->jd_no_addr))) {
+>>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 =======
 	    (!sdp->sd_jdesc || (blkno != sdp->sd_jdesc->jd_no_addr))) {
 >>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
