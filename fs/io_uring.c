@@ -11329,6 +11329,10 @@ static int io_uring_create(unsigned entries, struct io_uring_params *p,
 {
 	struct io_ring_ctx *ctx;
 	struct file *file;
+<<<<<<< HEAD
+=======
+	bool limit_mem;
+>>>>>>> 9faadcc8abe4... io_uring: fix double io_uring free
 	int ret;
 
 	if (!entries)
@@ -11437,7 +11441,10 @@ static int io_uring_create(unsigned entries, struct io_uring_params *p,
 	 */
 	ret = io_uring_install_fd(ctx, file);
 	if (ret < 0) {
+<<<<<<< HEAD
 		io_disable_sqo_submit(ctx);
+=======
+>>>>>>> 9faadcc8abe4... io_uring: fix double io_uring free
 		/* fput will clean it up */
 		fput(file);
 		return ret;
