@@ -4211,6 +4211,7 @@ void gpiod_put_array(struct gpio_descs *descs)
 }
 EXPORT_SYMBOL_GPL(gpiod_put_array);
 
+<<<<<<< HEAD
 
 static int gpio_bus_match(struct device *dev, struct device_driver *drv)
 {
@@ -4223,6 +4224,8 @@ static int gpio_bus_match(struct device *dev, struct device_driver *drv)
 	return 1;
 }
 
+=======
+>>>>>>> 4731210c09f5... gpiolib: Bind gpio_device to a driver to enable fw_devlink=on by default
 static int gpio_stub_drv_probe(struct device *dev)
 {
 	/*
