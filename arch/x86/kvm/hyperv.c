@@ -1487,11 +1487,14 @@ int kvm_hv_set_msr_common(struct kvm_vcpu *vcpu, u32 msr, u64 data, bool host)
 		return 1;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (!to_hv_vcpu(vcpu)) {
 		if (kvm_hv_vcpu_init(vcpu))
 			return 1;
 	}
 
+=======
+>>>>>>> 8f014550dfb1... KVM: x86: hyper-v: Make Hyper-V emulation enablement conditional
 =======
 >>>>>>> 8f014550dfb1... KVM: x86: hyper-v: Make Hyper-V emulation enablement conditional
 	if (kvm_hv_msr_partition_wide(msr)) {
@@ -1513,11 +1516,14 @@ int kvm_hv_get_msr_common(struct kvm_vcpu *vcpu, u32 msr, u64 *pdata, bool host)
 		return 1;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (!to_hv_vcpu(vcpu)) {
 		if (kvm_hv_vcpu_init(vcpu))
 			return 1;
 	}
 
+=======
+>>>>>>> 8f014550dfb1... KVM: x86: hyper-v: Make Hyper-V emulation enablement conditional
 =======
 >>>>>>> 8f014550dfb1... KVM: x86: hyper-v: Make Hyper-V emulation enablement conditional
 	if (kvm_hv_msr_partition_wide(msr)) {
