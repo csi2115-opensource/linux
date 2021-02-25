@@ -749,6 +749,14 @@ static int io_wq_manager(void *data)
 	} while (!test_bit(IO_WQ_BIT_EXIT, &wq->state));
 
 	io_wq_check_workers(wq);
+
+	/* if ERROR is set and we get here, we have workers to wake */
+	if (test_bit(IO_WQ_BIT_ERROR, &wq->state)) {
+		rcu_read_lock();
+		for_each_node(node)
+			io_wq_for_each_worker(wq->wqes[node], io_wq_worker_wake, NULL);
+		rcu_read_unlock();
+	}
 	wq->manager = NULL;
 	io_wq_put(wq);
 	do_exit(0);
@@ -802,6 +810,7 @@ static int io_wq_fork_manager(struct io_wq *wq)
 		return 0;
 	}
 
+	io_wq_put(wq);
 	return ret;
 }
 
@@ -1049,6 +1058,7 @@ struct io_wq *io_wq_create(unsigned bounded, struct io_wq_data *data)
 	if (!ret)
 		return wq;
 
+	io_wq_put(wq);
 	io_wq_put_hash(data->hash);
 err:
 	cpuhp_state_remove_instance_nocalls(io_wq_online, &wq->cpuhp_node);
