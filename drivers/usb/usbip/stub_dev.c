@@ -73,6 +73,16 @@ static ssize_t usbip_sockfd_store(struct device *dev, struct device_attribute *a
 		socket = sockfd_lookup(sockfd, &err);
 		if (!socket)
 			goto err;
+<<<<<<< HEAD
+=======
+		}
+
+		if (socket->type != SOCK_STREAM) {
+			dev_err(dev, "Expecting SOCK_STREAM - found %d",
+				socket->type);
+			goto sock_err;
+		}
+>>>>>>> 9380afd6df70... usbip: fix stub_dev usbip_sockfd_store() races leading to gpf
 
 		/* unlock and create threads and get tasks */
 		spin_unlock_irq(&sdev->ud.lock);
