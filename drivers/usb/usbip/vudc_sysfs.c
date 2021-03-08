@@ -153,6 +153,9 @@ static ssize_t usbip_sockfd_store(struct device *dev,
 		}
 
 		/* unlock and create threads and get tasks */
+<<<<<<< HEAD
+>>>>>>> 46613c9dfa96... usbip: fix vudc usbip_sockfd_store races leading to gpf
+=======
 >>>>>>> 46613c9dfa96... usbip: fix vudc usbip_sockfd_store races leading to gpf
 		spin_unlock_irq(&udc->ud.lock);
 		spin_unlock_irqrestore(&udc->lock, flags);
