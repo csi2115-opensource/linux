@@ -398,6 +398,22 @@ static ssize_t attach_store(struct device *dev, struct device_attribute *attr,
 		return -EINVAL;
 	}
 
+<<<<<<< HEAD
+>>>>>>> 718ad9693e36... usbip: fix vhci_hcd attach_store() races leading to gpf
+=======
+	/* create threads before locking */
+	tcp_rx = kthread_create(vhci_rx_loop, &vdev->ud, "vhci_rx");
+	if (IS_ERR(tcp_rx)) {
+		sockfd_put(socket);
+		return -EINVAL;
+	}
+	tcp_tx = kthread_create(vhci_tx_loop, &vdev->ud, "vhci_tx");
+	if (IS_ERR(tcp_tx)) {
+		kthread_stop(tcp_rx);
+		sockfd_put(socket);
+		return -EINVAL;
+	}
+
 >>>>>>> 718ad9693e36... usbip: fix vhci_hcd attach_store() races leading to gpf
 	/* get task structs now */
 	get_task_struct(tcp_rx);
