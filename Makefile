@@ -11,7 +11,11 @@ SUBLEVEL = 0
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 EXTRAVERSION = -rc1
+=======
+EXTRAVERSION = -rc6
+>>>>>>> e49d033bddf5... Linux 5.12-rc6
 NAME = Frozen Wasteland
 =======
 =======
