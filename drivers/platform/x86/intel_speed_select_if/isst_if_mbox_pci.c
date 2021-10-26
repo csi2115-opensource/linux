@@ -21,16 +21,12 @@
 #define PUNIT_MAILBOX_BUSY_BIT		31
 
 /*
- * The average time to complete mailbox commands is less than 40us. Most of
- * the commands complete in few micro seconds. But the same firmware handles
- * requests from all power management features.
- * We can create a scenario where we flood the firmware with requests then
- * the mailbox response can be delayed for 100s of micro seconds. So define
- * two timeouts. One for average case and one for long.
- * If the firmware is taking more than average, just call cond_resched().
+ * The average time to complete some commands is about 40us. The current
+ * count is enough to satisfy 40us. But when the firmware is very busy, this
+ * causes timeout occasionally.  So increase to deal with some worst case
+ * scenarios. Most of the command still complete in few us.
  */
-#define OS_MAILBOX_TIMEOUT_AVG_US	40
-#define OS_MAILBOX_TIMEOUT_MAX_US	1000
+#define OS_MAILBOX_RETRY_COUNT		100
 
 struct isst_if_device {
 	struct mutex mutex;
@@ -39,13 +35,11 @@ struct isst_if_device {
 static int isst_if_mbox_cmd(struct pci_dev *pdev,
 			    struct isst_if_mbox_cmd *mbox_cmd)
 {
-	s64 tm_delta = 0;
-	ktime_t tm;
-	u32 data;
+	u32 retries, data;
 	int ret;
 
 	/* Poll for rb bit == 0 */
-	tm = ktime_get();
+	retries = OS_MAILBOX_RETRY_COUNT;
 	do {
 		ret = pci_read_config_dword(pdev, PUNIT_MAILBOX_INTERFACE,
 					    &data);
@@ -54,14 +48,11 @@ static int isst_if_mbox_cmd(struct pci_dev *pdev,
 
 		if (data & BIT_ULL(PUNIT_MAILBOX_BUSY_BIT)) {
 			ret = -EBUSY;
-			tm_delta = ktime_us_delta(ktime_get(), tm);
-			if (tm_delta > OS_MAILBOX_TIMEOUT_AVG_US)
-				cond_resched();
 			continue;
 		}
 		ret = 0;
 		break;
-	} while (tm_delta < OS_MAILBOX_TIMEOUT_MAX_US);
+	} while (--retries);
 
 	if (ret)
 		return ret;
@@ -83,8 +74,7 @@ static int isst_if_mbox_cmd(struct pci_dev *pdev,
 		return ret;
 
 	/* Poll for rb bit == 0 */
-	tm_delta = 0;
-	tm = ktime_get();
+	retries = OS_MAILBOX_RETRY_COUNT;
 	do {
 		ret = pci_read_config_dword(pdev, PUNIT_MAILBOX_INTERFACE,
 					    &data);
@@ -93,9 +83,6 @@ static int isst_if_mbox_cmd(struct pci_dev *pdev,
 
 		if (data & BIT_ULL(PUNIT_MAILBOX_BUSY_BIT)) {
 			ret = -EBUSY;
-			tm_delta = ktime_us_delta(ktime_get(), tm);
-			if (tm_delta > OS_MAILBOX_TIMEOUT_AVG_US)
-				cond_resched();
 			continue;
 		}
 
@@ -109,7 +96,7 @@ static int isst_if_mbox_cmd(struct pci_dev *pdev,
 		mbox_cmd->resp_data = data;
 		ret = 0;
 		break;
-	} while (tm_delta < OS_MAILBOX_TIMEOUT_MAX_US);
+	} while (--retries);
 
 	return ret;
 }

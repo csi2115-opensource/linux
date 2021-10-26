@@ -25,7 +25,6 @@ static const struct acpi_device_id intel_hid_ids[] = {
 	{"INT33D5", 0},
 	{"INTC1051", 0},
 	{"INTC1054", 0},
-	{"INTC1070", 0},
 	{"", 0},
 };
 MODULE_DEVICE_TABLE(acpi, intel_hid_ids);
@@ -89,13 +88,6 @@ static const struct dmi_system_id button_array_table[] = {
 		.matches = {
 			DMI_MATCH(DMI_SYS_VENDOR, "HP"),
 			DMI_MATCH(DMI_PRODUCT_NAME, "HP Spectre x2 Detachable"),
-		},
-	},
-	{
-		.ident = "Lenovo ThinkPad X1 Tablet Gen 2",
-		.matches = {
-			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-			DMI_MATCH(DMI_PRODUCT_FAMILY, "ThinkPad X1 Tablet Gen 2"),
 		},
 	},
 	{ }
@@ -484,16 +476,11 @@ static void notify_handler(acpi_handle handle, u32 event, void *context)
 			goto wakeup;
 
 		/*
-		 * Some devices send (duplicate) tablet-mode events when moved
-		 * around even though the mode has not changed; and they do this
-		 * even when suspended.
-		 * Update the switch state in case it changed and then return
-		 * without waking up to avoid spurious wakeups.
+		 * Switch events will wake the device and report the new switch
+		 * position to the input subsystem.
 		 */
-		if (event == 0xcc || event == 0xcd) {
-			report_tablet_mode_event(priv->switches, event);
-			return;
-		}
+		if (priv->switches && (event == 0xcc || event == 0xcd))
+			goto wakeup;
 
 		/* Wake up on 5-button array events only. */
 		if (event == 0xc0 || !priv->array)
@@ -506,6 +493,9 @@ static void notify_handler(acpi_handle handle, u32 event, void *context)
 
 wakeup:
 		pm_wakeup_hard_event(&device->dev);
+
+		if (report_tablet_mode_event(priv->switches, event))
+			return;
 
 		return;
 	}

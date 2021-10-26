@@ -1156,7 +1156,6 @@ static void __exit atarilance_module_exit(void)
 module_init(atarilance_module_init);
 module_exit(atarilance_module_exit);
 #endif /* MODULE */
-<<<<<<< HEAD
 
 
 /*
@@ -1165,5 +1164,3 @@ module_exit(atarilance_module_exit);
  *  tab-width: 4
  * End:
  */
-=======
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping

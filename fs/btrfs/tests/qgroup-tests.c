@@ -224,11 +224,7 @@ static int test_no_shared_qgroup(struct btrfs_root *root,
 	 * quota.
 	 */
 	ret = btrfs_find_all_roots(&trans, fs_info, nodesize, 0, &old_roots,
-<<<<<<< HEAD
 			false);
-=======
-			false, false);
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 	if (ret) {
 		ulist_free(old_roots);
 		test_err("couldn't find old roots: %d", ret);
@@ -241,11 +237,7 @@ static int test_no_shared_qgroup(struct btrfs_root *root,
 		return ret;
 
 	ret = btrfs_find_all_roots(&trans, fs_info, nodesize, 0, &new_roots,
-<<<<<<< HEAD
 			false);
-=======
-			false, false);
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 	if (ret) {
 		ulist_free(old_roots);
 		ulist_free(new_roots);
@@ -269,11 +261,7 @@ static int test_no_shared_qgroup(struct btrfs_root *root,
 	new_roots = NULL;
 
 	ret = btrfs_find_all_roots(&trans, fs_info, nodesize, 0, &old_roots,
-<<<<<<< HEAD
 			false);
-=======
-			false, false);
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 	if (ret) {
 		ulist_free(old_roots);
 		test_err("couldn't find old roots: %d", ret);
@@ -285,11 +273,7 @@ static int test_no_shared_qgroup(struct btrfs_root *root,
 		return -EINVAL;
 
 	ret = btrfs_find_all_roots(&trans, fs_info, nodesize, 0, &new_roots,
-<<<<<<< HEAD
 			false);
-=======
-			false, false);
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 	if (ret) {
 		ulist_free(old_roots);
 		ulist_free(new_roots);
@@ -341,11 +325,7 @@ static int test_multiple_refs(struct btrfs_root *root,
 	}
 
 	ret = btrfs_find_all_roots(&trans, fs_info, nodesize, 0, &old_roots,
-<<<<<<< HEAD
 			false);
-=======
-			false, false);
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 	if (ret) {
 		ulist_free(old_roots);
 		test_err("couldn't find old roots: %d", ret);
@@ -358,11 +338,7 @@ static int test_multiple_refs(struct btrfs_root *root,
 		return ret;
 
 	ret = btrfs_find_all_roots(&trans, fs_info, nodesize, 0, &new_roots,
-<<<<<<< HEAD
 			false);
-=======
-			false, false);
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 	if (ret) {
 		ulist_free(old_roots);
 		ulist_free(new_roots);
@@ -384,11 +360,7 @@ static int test_multiple_refs(struct btrfs_root *root,
 	}
 
 	ret = btrfs_find_all_roots(&trans, fs_info, nodesize, 0, &old_roots,
-<<<<<<< HEAD
 			false);
-=======
-			false, false);
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 	if (ret) {
 		ulist_free(old_roots);
 		test_err("couldn't find old roots: %d", ret);
@@ -401,11 +373,7 @@ static int test_multiple_refs(struct btrfs_root *root,
 		return ret;
 
 	ret = btrfs_find_all_roots(&trans, fs_info, nodesize, 0, &new_roots,
-<<<<<<< HEAD
 			false);
-=======
-			false, false);
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 	if (ret) {
 		ulist_free(old_roots);
 		ulist_free(new_roots);
@@ -433,11 +401,7 @@ static int test_multiple_refs(struct btrfs_root *root,
 	}
 
 	ret = btrfs_find_all_roots(&trans, fs_info, nodesize, 0, &old_roots,
-<<<<<<< HEAD
 			false);
-=======
-			false, false);
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 	if (ret) {
 		ulist_free(old_roots);
 		test_err("couldn't find old roots: %d", ret);
@@ -450,11 +414,7 @@ static int test_multiple_refs(struct btrfs_root *root,
 		return ret;
 
 	ret = btrfs_find_all_roots(&trans, fs_info, nodesize, 0, &new_roots,
-<<<<<<< HEAD
 			false);
-=======
-			false, false);
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 	if (ret) {
 		ulist_free(old_roots);
 		ulist_free(new_roots);

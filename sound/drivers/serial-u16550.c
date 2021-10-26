@@ -784,12 +784,7 @@ static int snd_uart16550_create(struct snd_card *card,
 	int err;
 
 
-<<<<<<< HEAD
 	if ((uart = kzalloc(sizeof(*uart), GFP_KERNEL)) == NULL)
-=======
-	uart = kzalloc(sizeof(*uart), GFP_KERNEL);
-	if (!uart)
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 		return -ENOMEM;
 	uart->adaptor = adaptor;
 	uart->card = card;
@@ -824,12 +819,7 @@ static int snd_uart16550_create(struct snd_card *card,
 	uart->timer_running = 0;
 
 	/* Register device */
-<<<<<<< HEAD
 	if ((err = snd_device_new(card, SNDRV_DEV_LOWLEVEL, uart, &ops)) < 0) {
-=======
-	err = snd_device_new(card, SNDRV_DEV_LOWLEVEL, uart, &ops);
-	if (err < 0) {
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 		snd_uart16550_free(uart);
 		return err;
 	}
@@ -943,7 +933,6 @@ static int snd_serial_probe(struct platform_device *devptr)
 	strcpy(card->driver, "Serial");
 	strcpy(card->shortname, "Serial MIDI (UART16550A)");
 
-<<<<<<< HEAD
 	if ((err = snd_uart16550_create(card,
 					port[dev],
 					irq[dev],
@@ -952,12 +941,6 @@ static int snd_serial_probe(struct platform_device *devptr)
 					adaptor[dev],
 					droponfull[dev],
 					&uart)) < 0)
-=======
-	err = snd_uart16550_create(card, port[dev], irq[dev], speed[dev],
-				   base[dev], adaptor[dev], droponfull[dev],
-				   &uart);
-	if (err < 0)
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 		goto _err;
 
 	err = snd_uart16550_rmidi(uart, 0, outs[dev], ins[dev], &uart->rmidi);
@@ -970,12 +953,7 @@ static int snd_serial_probe(struct platform_device *devptr)
 		uart->base,
 		uart->irq);
 
-<<<<<<< HEAD
 	if ((err = snd_card_register(card)) < 0)
-=======
-	err = snd_card_register(card);
-	if (err < 0)
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 		goto _err;
 
 	platform_set_drvdata(devptr, card);

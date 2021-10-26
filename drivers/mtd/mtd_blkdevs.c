@@ -254,17 +254,10 @@ error_put:
 static void blktrans_release(struct gendisk *disk, fmode_t mode)
 {
 	struct mtd_blktrans_dev *dev = blktrans_dev_get(disk);
-<<<<<<< HEAD
 
 	if (!dev)
 		return;
 
-=======
-
-	if (!dev)
-		return;
-
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 	mutex_lock(&mtd_table_mutex);
 	mutex_lock(&dev->lock);
 
@@ -361,11 +354,7 @@ int add_mtd_blktrans_dev(struct mtd_blktrans_dev *new)
 	if (new->devnum > (MINORMASK >> tr->part_bits) ||
 	    (tr->part_bits && new->devnum >= 27 * 26)) {
 		mutex_unlock(&blktrans_ref_mutex);
-<<<<<<< HEAD
 		goto error1;
-=======
-		return ret;
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 	}
 
 	list_add_tail(&new->list, &tr->devs);

@@ -15,7 +15,6 @@ struct qrtr_mhi_dev {
 	struct qrtr_endpoint ep;
 	struct mhi_device *mhi_dev;
 	struct device *dev;
-	struct completion ready;
 };
 
 /* From MHI to QRTR */
@@ -51,16 +50,6 @@ static int qcom_mhi_qrtr_send(struct qrtr_endpoint *ep, struct sk_buff *skb)
 	struct qrtr_mhi_dev *qdev = container_of(ep, struct qrtr_mhi_dev, ep);
 	int rc;
 
-<<<<<<< HEAD
-=======
-	rc = wait_for_completion_interruptible(&qdev->ready);
-	if (rc)
-		goto free_skb;
-
-	if (skb->sk)
-		sock_hold(skb->sk);
-
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 	rc = skb_linearize(skb);
 	if (rc)
 		goto free_skb;
@@ -88,7 +77,7 @@ static int qcom_mhi_qrtr_probe(struct mhi_device *mhi_dev,
 	int rc;
 
 	/* start channels */
-	rc = mhi_prepare_for_transfer(mhi_dev, 0);
+	rc = mhi_prepare_for_transfer(mhi_dev);
 	if (rc)
 		return rc;
 
@@ -105,15 +94,6 @@ static int qcom_mhi_qrtr_probe(struct mhi_device *mhi_dev,
 	if (rc)
 		return rc;
 
-	/* start channels */
-	rc = mhi_prepare_for_transfer(mhi_dev, MHI_CH_INBOUND_ALLOC_BUFS);
-	if (rc) {
-		qrtr_endpoint_unregister(&qdev->ep);
-		dev_set_drvdata(&mhi_dev->dev, NULL);
-		return rc;
-	}
-
-	complete_all(&qdev->ready);
 	dev_dbg(qdev->dev, "Qualcomm MHI QRTR driver probed\n");
 
 	return 0;

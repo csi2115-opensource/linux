@@ -37,11 +37,8 @@ notrace long system_call_exception(long r3, long r4, long r5,
 	CT_WARN_ON(ct_state() == CONTEXT_KERNEL);
 	user_exit_irqoff();
 
-<<<<<<< HEAD
 	trace_hardirqs_off(); /* finish reconciling */
 
-=======
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 	if (!IS_ENABLED(CONFIG_BOOKE) && !IS_ENABLED(CONFIG_40x))
 		BUG_ON(!(regs->msr & MSR_RI));
 	BUG_ON(!(regs->msr & MSR_PR));
@@ -428,19 +425,7 @@ again:
 	local_paca->tm_scratch = regs->msr;
 #endif
 
-<<<<<<< HEAD
 	account_cpu_user_exit();
-=======
-notrace unsigned long interrupt_exit_user_prepare(struct pt_regs *regs)
-{
-	unsigned long ret;
-
-	if (!IS_ENABLED(CONFIG_BOOKE) && !IS_ENABLED(CONFIG_40x))
-		BUG_ON(!(regs->msr & MSR_RI));
-	BUG_ON(!(regs->msr & MSR_PR));
-	BUG_ON(arch_irq_disabled_regs(regs));
-	CT_WARN_ON(ct_state() == CONTEXT_USER);
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 
 	/*
 	 * We do this at the end so that we do context switch with KERNEL AMR
@@ -466,10 +451,7 @@ notrace unsigned long interrupt_exit_kernel_prepare(struct pt_regs *regs, unsign
 	    unlikely(!(regs->msr & MSR_RI)))
 		unrecoverable_exception(regs);
 	BUG_ON(regs->msr & MSR_PR);
-<<<<<<< HEAD
 	BUG_ON(!FULL_REGS(regs));
-=======
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 	/*
 	 * CT_WARN_ON comes here via program_check_exception,
 	 * so avoid recursion.

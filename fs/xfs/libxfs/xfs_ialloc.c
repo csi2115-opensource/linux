@@ -244,11 +244,7 @@ xfs_check_agi_freecount(
 		} while (i == 1);
 
 		if (!XFS_FORCED_SHUTDOWN(cur->bc_mp))
-<<<<<<< HEAD
 			ASSERT(freecount == be32_to_cpu(agi->agi_freecount));
-=======
-			ASSERT(freecount == cur->bc_ag.pag->pagi_freecount);
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 	}
 	return 0;
 }
@@ -865,14 +861,9 @@ sparse_alloc:
 		 * existing record with this one.
 		 */
 		if (xfs_sb_version_hasfinobt(&args.mp->m_sb)) {
-<<<<<<< HEAD
 			error = xfs_inobt_insert_sprec(args.mp, tp, agbp,
 						       XFS_BTNUM_FINO, &rec,
 						       false);
-=======
-			error = xfs_inobt_insert_sprec(args.mp, tp, agbp, pag,
-				       XFS_BTNUM_FINO, &rec, false);
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 			if (error)
 				return error;
 		}
@@ -884,11 +875,7 @@ sparse_alloc:
 			return error;
 
 		if (xfs_sb_version_hasfinobt(&args.mp->m_sb)) {
-<<<<<<< HEAD
 			error = xfs_inobt_insert(args.mp, tp, agbp, newino,
-=======
-			error = xfs_inobt_insert(args.mp, tp, agbp, pag, newino,
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 						 newlen, XFS_BTNUM_FINO);
 			if (error)
 				return error;
@@ -1602,11 +1589,7 @@ xfs_dialloc_ag(
 	int				i;
 
 	if (!xfs_sb_version_hasfinobt(&mp->m_sb))
-<<<<<<< HEAD
 		return xfs_dialloc_ag_inobt(tp, agbp, parent, inop);
-=======
-		return xfs_dialloc_ag_inobt(tp, agbp, pag, parent, inop);
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 
 	/*
 	 * If pagino is 0 (this is the root inode allocation) use newino.
@@ -1804,7 +1787,6 @@ xfs_dialloc_select_ag(
 				break;
 		}
 
-<<<<<<< HEAD
 		/*
 		 * Do a first racy fast path check if this AG is usable.
 		 */
@@ -1817,10 +1799,6 @@ xfs_dialloc_select_ag(
 		 */
 		error = xfs_ialloc_read_agi(mp, *tpp, agno, &agbp);
 		if (error)
-=======
-		if (XFS_FORCED_SHUTDOWN(mp)) {
-			error = -EFSCORRUPTED;
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 			break;
 
 		if (pag->pagi_freecount) {
@@ -2261,11 +2239,7 @@ xfs_difree(
 	 * Fix up the free inode btree.
 	 */
 	if (xfs_sb_version_hasfinobt(&mp->m_sb)) {
-<<<<<<< HEAD
 		error = xfs_difree_finobt(mp, tp, agbp, agino, &rec);
-=======
-		error = xfs_difree_finobt(mp, tp, agbp, pag, agino, &rec);
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 		if (error)
 			goto error0;
 	}
@@ -2995,61 +2969,3 @@ xfs_ialloc_calc_rootino(
 
 	return XFS_AGINO_TO_INO(mp, 0, XFS_AGB_TO_AGINO(mp, first_bno));
 }
-<<<<<<< HEAD
-=======
-
-/*
- * Ensure there are not sparse inode clusters that cross the new EOAG.
- *
- * This is a no-op for non-spinode filesystems since clusters are always fully
- * allocated and checking the bnobt suffices.  However, a spinode filesystem
- * could have a record where the upper inodes are free blocks.  If those blocks
- * were removed from the filesystem, the inode record would extend beyond EOAG,
- * which will be flagged as corruption.
- */
-int
-xfs_ialloc_check_shrink(
-	struct xfs_trans	*tp,
-	xfs_agnumber_t		agno,
-	struct xfs_buf		*agibp,
-	xfs_agblock_t		new_length)
-{
-	struct xfs_inobt_rec_incore rec;
-	struct xfs_btree_cur	*cur;
-	struct xfs_mount	*mp = tp->t_mountp;
-	struct xfs_perag	*pag;
-	xfs_agino_t		agino = XFS_AGB_TO_AGINO(mp, new_length);
-	int			has;
-	int			error;
-
-	if (!xfs_sb_version_hassparseinodes(&mp->m_sb))
-		return 0;
-
-	pag = xfs_perag_get(mp, agno);
-	cur = xfs_inobt_init_cursor(mp, tp, agibp, pag, XFS_BTNUM_INO);
-
-	/* Look up the inobt record that would correspond to the new EOFS. */
-	error = xfs_inobt_lookup(cur, agino, XFS_LOOKUP_LE, &has);
-	if (error || !has)
-		goto out;
-
-	error = xfs_inobt_get_rec(cur, &rec, &has);
-	if (error)
-		goto out;
-
-	if (!has) {
-		error = -EFSCORRUPTED;
-		goto out;
-	}
-
-	/* If the record covers inodes that would be beyond EOFS, bail out. */
-	if (rec.ir_startino + XFS_INODES_PER_CHUNK > agino) {
-		error = -ENOSPC;
-		goto out;
-	}
-out:
-	xfs_btree_del_cursor(cur, error);
-	xfs_perag_put(pag);
-	return error;
-}
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping

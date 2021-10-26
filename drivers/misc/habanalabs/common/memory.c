@@ -145,7 +145,7 @@ static int alloc_device_memory(struct hl_ctx *ctx, struct hl_mem_in *args,
 
 	spin_lock(&vm->idr_lock);
 	handle = idr_alloc(&vm->phys_pg_pack_handles, phys_pg_pack, 1, 0,
-				GFP_KERNEL);
+				GFP_ATOMIC);
 	spin_unlock(&vm->idr_lock);
 
 	if (handle < 0) {
@@ -561,15 +561,8 @@ static u64 get_va_block(struct hl_device *hdev,
 	if ((is_align_pow_2 && (hint_addr & (va_block_align - 1))) ||
 			(!is_align_pow_2 &&
 				do_div(tmp_hint_addr, va_range->page_size))) {
-<<<<<<< HEAD
 		dev_info(hdev->dev, "Hint address 0x%llx will be ignored\n",
 					hint_addr);
-=======
-
-		dev_dbg(hdev->dev,
-			"Hint address 0x%llx will be ignored because it is not aligned\n",
-			hint_addr);
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 		hint_addr = 0;
 	}
 
@@ -1279,7 +1272,7 @@ static int unmap_device_va(struct hl_ctx *ctx, struct hl_mem_in *args,
 	kfree(hnode);
 
 	if (is_userptr) {
-		rc = free_phys_pg_pack(hdev, phys_pg_pack);
+		free_phys_pg_pack(hdev, phys_pg_pack);
 		dma_unmap_host_va(hdev, userptr);
 	}
 
@@ -1631,15 +1624,11 @@ int hl_pin_host_memory(struct hl_device *hdev, u64 addr, u64 size,
 		return -EINVAL;
 	}
 
-<<<<<<< HEAD
 	/*
 	 * This function can be called also from data path, hence use atomic
 	 * always as it is not a big allocation.
 	 */
 	userptr->sgt = kzalloc(sizeof(*userptr->sgt), GFP_ATOMIC);
-=======
-	userptr->sgt = kzalloc(sizeof(*userptr->sgt), GFP_KERNEL);
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 	if (!userptr->sgt)
 		return -ENOMEM;
 

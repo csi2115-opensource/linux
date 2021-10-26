@@ -17,7 +17,7 @@ description: |
   node.
 
   The SPMI controller part is provided by
-  Documentation/devicetree/bindings/mfd/hisilicon,hi6421-spmi-pmic.yaml
+  drivers/staging/hikey9xx/hisilicon,hisi-spmi-controller.yaml.
 
 properties:
   $nodename:
@@ -32,11 +32,12 @@ properties:
   '#interrupt-cells':
     const: 2
 
-  interrupt-controller: true
+  interrupt-controller:
+    description:
+      Identify that the PMIC is capable of behaving as an interrupt controller.
 
   gpios:
     maxItems: 1
-    description: GPIO used for IRQs
 
   regulators:
     type: object

@@ -1224,10 +1224,7 @@ static int nixge_of_get_resources(struct platform_device *pdev)
 	const struct of_device_id *of_id;
 	enum nixge_version version;
 	struct resource *ctrlres;
-<<<<<<< HEAD
 	struct resource *dmares;
-=======
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 	struct net_device *ndev;
 	struct nixge_priv *priv;
 

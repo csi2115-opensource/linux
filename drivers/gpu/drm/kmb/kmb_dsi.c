@@ -1322,8 +1322,7 @@ static u32 mipi_tx_init_dphy(struct kmb_dsi *kmb_dsi,
 	return 0;
 }
 
-static void connect_lcd_to_mipi(struct kmb_dsi *kmb_dsi,
-				struct drm_atomic_state *old_state)
+static void connect_lcd_to_mipi(struct kmb_dsi *kmb_dsi)
 {
 	struct regmap *msscam;
 
@@ -1332,7 +1331,7 @@ static void connect_lcd_to_mipi(struct kmb_dsi *kmb_dsi,
 		dev_dbg(kmb_dsi->dev, "failed to get msscam syscon");
 		return;
 	}
-	drm_atomic_bridge_chain_enable(adv_bridge, old_state);
+
 	/* DISABLE MIPI->CIF CONNECTION */
 	regmap_write(msscam, MSS_MIPI_CIF_CFG, 0);
 
@@ -1343,7 +1342,7 @@ static void connect_lcd_to_mipi(struct kmb_dsi *kmb_dsi,
 }
 
 int kmb_dsi_mode_set(struct kmb_dsi *kmb_dsi, struct drm_display_mode *mode,
-		     int sys_clk_mhz, struct drm_atomic_state *old_state)
+		     int sys_clk_mhz)
 {
 	u64 data_rate;
 
@@ -1396,7 +1395,7 @@ int kmb_dsi_mode_set(struct kmb_dsi *kmb_dsi, struct drm_display_mode *mode,
 	/* Dphy initialization */
 	mipi_tx_init_dphy(kmb_dsi, &mipi_tx_init_cfg);
 
-	connect_lcd_to_mipi(kmb_dsi, old_state);
+	connect_lcd_to_mipi(kmb_dsi);
 	dev_info(kmb_dsi->dev, "mipi hw initialized");
 
 	return 0;
