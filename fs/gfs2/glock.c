@@ -271,24 +271,12 @@ static void __gfs2_glock_put(struct gfs2_glock *gl)
 	spin_unlock(&gl->gl_lockref.lock);
 	GLOCK_BUG_ON(gl, !list_empty(&gl->gl_holders));
 <<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	if (mapping) {
 		truncate_inode_pages_final(mapping);
 		if (!gfs2_withdrawn(sdp))
 			GLOCK_BUG_ON(gl, mapping->nrpages ||
 				     mapping->nrexceptional);
 	}
-=======
-	GLOCK_BUG_ON(gl, mapping && mapping->nrpages && !gfs2_withdrawn(sdp));
->>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
-=======
-	GLOCK_BUG_ON(gl, mapping && mapping->nrpages && !gfs2_withdrawn(sdp));
->>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
-=======
-	GLOCK_BUG_ON(gl, mapping && mapping->nrpages && !gfs2_withdrawn(sdp));
->>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 =======
 	GLOCK_BUG_ON(gl, mapping && mapping->nrpages && !gfs2_withdrawn(sdp));
 >>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
