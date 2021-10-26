@@ -749,17 +749,6 @@ static int io_wq_manager(void *data)
 	} while (!test_bit(IO_WQ_BIT_EXIT, &wq->state));
 
 	io_wq_check_workers(wq);
-<<<<<<< HEAD
-=======
-
-	/* if ERROR is set and we get here, we have workers to wake */
-	if (test_bit(IO_WQ_BIT_ERROR, &wq->state)) {
-		rcu_read_lock();
-		for_each_node(node)
-			io_wq_for_each_worker(wq->wqes[node], io_wq_worker_wake, NULL);
-		rcu_read_unlock();
-	}
->>>>>>> 4fb6ac326204... io-wq: improve manager/worker handling over exec
 	wq->manager = NULL;
 	io_wq_put(wq);
 	do_exit(0);
