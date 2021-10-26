@@ -590,17 +590,11 @@ out:
 int gfs2_make_fs_ro(struct gfs2_sbd *sdp)
 {
 <<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	int error = 0;
 	int log_write_allowed = test_bit(SDF_JOURNAL_LIVE, &sdp->sd_flags);
 
 	gfs2_flush_delete_work(sdp);
 =======
-=======
->>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
-=======
->>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 	struct gfs2_holder freeze_gh;
 	int error = 0;
 	int log_write_allowed = test_bit(SDF_JOURNAL_LIVE, &sdp->sd_flags);
@@ -624,15 +618,6 @@ int gfs2_make_fs_ro(struct gfs2_sbd *sdp)
 	}
 
 	flush_workqueue(gfs2_delete_workqueue);
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
-=======
->>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
-=======
->>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
-=======
 >>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 	if (!log_write_allowed && current == sdp->sd_quotad_process)
 		fs_warn(sdp, "The quotad daemon is withdrawing.\n");
@@ -650,16 +635,7 @@ int gfs2_make_fs_ro(struct gfs2_sbd *sdp)
 		gfs2_quota_sync(sdp->sd_vfs, 0);
 		gfs2_statfs_sync(sdp->sd_vfs, 0);
 <<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 =======
-=======
->>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
-=======
->>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
-=======
->>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 
 		gfs2_log_flush(sdp, NULL, GFS2_LOG_HEAD_FLUSH_SHUTDOWN |
 			       GFS2_LFC_MAKE_FS_RO);
