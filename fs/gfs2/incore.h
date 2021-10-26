@@ -226,7 +226,16 @@ struct gfs2_glock_operations {
 	void (*go_callback)(struct gfs2_glock *gl, bool remote);
 	void (*go_free)(struct gfs2_glock *gl);
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
 	const int go_subclass;
+=======
+>>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
+=======
+>>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
+=======
+>>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 =======
 >>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 	const int go_type;
@@ -335,6 +344,15 @@ enum {
 	GLF_PENDING_DELETE		= 17,
 =======
 	GLF_INODE_CREATING		= 16, /* Inode creation occurring */
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
+=======
+>>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
+=======
+>>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
+=======
 >>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 	GLF_FREEING			= 18, /* Wait for glock to be freed */
 };
