@@ -589,10 +589,36 @@ out:
 
 int gfs2_make_fs_ro(struct gfs2_sbd *sdp)
 {
+<<<<<<< HEAD
 	int error = 0;
 	int log_write_allowed = test_bit(SDF_JOURNAL_LIVE, &sdp->sd_flags);
 
 	gfs2_flush_delete_work(sdp);
+=======
+	struct gfs2_holder freeze_gh;
+	int error = 0;
+	int log_write_allowed = test_bit(SDF_JOURNAL_LIVE, &sdp->sd_flags);
+
+	gfs2_holder_mark_uninitialized(&freeze_gh);
+	if (sdp->sd_freeze_gl &&
+	    !gfs2_glock_is_locked_by_me(sdp->sd_freeze_gl)) {
+		if (!log_write_allowed) {
+			error = gfs2_glock_nq_init(sdp->sd_freeze_gl,
+						   LM_ST_SHARED, GL_NOCACHE |
+						   LM_FLAG_TRY, &freeze_gh);
+			if (error == GLR_TRYFAILED)
+				error = 0;
+		} else {
+			error = gfs2_glock_nq_init(sdp->sd_freeze_gl,
+						   LM_ST_SHARED, GL_NOCACHE,
+						   &freeze_gh);
+			if (error && !gfs2_withdrawn(sdp))
+				return error;
+		}
+	}
+
+	flush_workqueue(gfs2_delete_workqueue);
+>>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 	if (!log_write_allowed && current == sdp->sd_quotad_process)
 		fs_warn(sdp, "The quotad daemon is withdrawing.\n");
 	else if (sdp->sd_quotad_process)
@@ -608,6 +634,23 @@ int gfs2_make_fs_ro(struct gfs2_sbd *sdp)
 	if (log_write_allowed) {
 		gfs2_quota_sync(sdp->sd_vfs, 0);
 		gfs2_statfs_sync(sdp->sd_vfs, 0);
+<<<<<<< HEAD
+=======
+
+		gfs2_log_flush(sdp, NULL, GFS2_LOG_HEAD_FLUSH_SHUTDOWN |
+			       GFS2_LFC_MAKE_FS_RO);
+		wait_event(sdp->sd_reserving_log_wait,
+			   atomic_read(&sdp->sd_reserving_log) == 0);
+		gfs2_assert_warn(sdp, atomic_read(&sdp->sd_log_blks_free) ==
+				 sdp->sd_jdesc->jd_blocks);
+	} else {
+		wait_event_timeout(sdp->sd_reserving_log_wait,
+				   atomic_read(&sdp->sd_reserving_log) == 0,
+				   HZ * 5);
+	}
+	if (gfs2_holder_initialized(&freeze_gh))
+		gfs2_glock_dq_uninit(&freeze_gh);
+>>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 
 		gfs2_log_flush(sdp, NULL, GFS2_LOG_HEAD_FLUSH_SHUTDOWN |
 			       GFS2_LFC_MAKE_FS_RO);
