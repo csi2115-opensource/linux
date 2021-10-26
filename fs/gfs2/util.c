@@ -91,6 +91,7 @@ out_unlock:
 	return error;
 }
 
+<<<<<<< HEAD
 /**
  * gfs2_freeze_lock - hold the freeze glock
  * @sdp: the superblock
@@ -124,6 +125,14 @@ static void signal_our_withdraw(struct gfs2_sbd *sdp)
 	struct gfs2_glock *i_gl = ip->i_gl;
 	u64 no_formal_ino = ip->i_no_formal_ino;
 	int log_write_allowed = test_bit(SDF_JOURNAL_LIVE, &sdp->sd_flags);
+=======
+static void signal_our_withdraw(struct gfs2_sbd *sdp)
+{
+	struct gfs2_glock *gl = sdp->sd_live_gh.gh_gl;
+	struct inode *inode = sdp->sd_jdesc->jd_inode;
+	struct gfs2_inode *ip = GFS2_I(inode);
+	u64 no_formal_ino = ip->i_no_formal_ino;
+>>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 	int ret = 0;
 	int tries;
 
@@ -144,6 +153,7 @@ static void signal_our_withdraw(struct gfs2_sbd *sdp)
 	 * therefore we need to clear SDF_JOURNAL_LIVE manually.
 	 */
 	clear_bit(SDF_JOURNAL_LIVE, &sdp->sd_flags);
+<<<<<<< HEAD
 	if (!sb_rdonly(sdp->sd_vfs)) {
 		struct gfs2_holder freeze_gh;
 
@@ -166,6 +176,11 @@ static void signal_our_withdraw(struct gfs2_sbd *sdp)
 		clear_bit(SDF_WITHDRAW_RECOVERY, &sdp->sd_flags);
 		goto skip_recovery;
 	}
+=======
+	if (!sb_rdonly(sdp->sd_vfs))
+		ret = gfs2_make_fs_ro(sdp);
+
+>>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 	/*
 	 * Drop the glock for our journal so another node can recover it.
 	 */
@@ -177,12 +192,20 @@ static void signal_our_withdraw(struct gfs2_sbd *sdp)
 	gfs2_glock_dq(&sdp->sd_jinode_gh);
 	if (test_bit(SDF_FS_FROZEN, &sdp->sd_flags)) {
 		/* Make sure gfs2_unfreeze works if partially-frozen */
+<<<<<<< HEAD
 		flush_work(&sdp->sd_freeze_work);
 		atomic_set(&sdp->sd_freeze_state, SFS_FROZEN);
 		thaw_super(sdp->sd_vfs);
 	} else {
 		wait_on_bit(&i_gl->gl_flags, GLF_DEMOTE,
 			    TASK_UNINTERRUPTIBLE);
+=======
+		flush_workqueue(gfs2_freeze_wq);
+		atomic_set(&sdp->sd_freeze_state, SFS_FROZEN);
+		thaw_super(sdp->sd_vfs);
+	} else {
+		wait_on_bit(&gl->gl_flags, GLF_DEMOTE, TASK_UNINTERRUPTIBLE);
+>>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 	}
 
 	/*
@@ -202,6 +225,7 @@ static void signal_our_withdraw(struct gfs2_sbd *sdp)
 	 * on other nodes to be successful, otherwise we remain the owner of
 	 * the glock as far as dlm is concerned.
 	 */
+<<<<<<< HEAD
 	if (i_gl->gl_ops->go_free) {
 		set_bit(GLF_FREEING, &i_gl->gl_flags);
 		wait_on_bit(&i_gl->gl_flags, GLF_FREEING, TASK_UNINTERRUPTIBLE);
@@ -211,6 +235,21 @@ static void signal_our_withdraw(struct gfs2_sbd *sdp)
 	 * Dequeue the "live" glock, but keep a reference so it's never freed.
 	 */
 	gfs2_glock_hold(live_gl);
+=======
+	if (gl->gl_ops->go_free) {
+		set_bit(GLF_FREEING, &gl->gl_flags);
+		wait_on_bit(&gl->gl_flags, GLF_FREEING, TASK_UNINTERRUPTIBLE);
+	}
+
+	if (sdp->sd_lockstruct.ls_ops->lm_lock == NULL) { /* lock_nolock */
+		clear_bit(SDF_WITHDRAW_RECOVERY, &sdp->sd_flags);
+		goto skip_recovery;
+	}
+	/*
+	 * Dequeue the "live" glock, but keep a reference so it's never freed.
+	 */
+	gfs2_glock_hold(gl);
+>>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 	gfs2_glock_dq_wait(&sdp->sd_live_gh);
 	/*
 	 * We enqueue the "live" glock in EX so that all other nodes
@@ -249,7 +288,11 @@ static void signal_our_withdraw(struct gfs2_sbd *sdp)
 		gfs2_glock_nq(&sdp->sd_live_gh);
 	}
 
+<<<<<<< HEAD
 	gfs2_glock_queue_put(live_gl); /* drop extra reference we acquired */
+=======
+	gfs2_glock_queue_put(gl); /* drop the extra reference we acquired */
+>>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 	clear_bit(SDF_WITHDRAW_RECOVERY, &sdp->sd_flags);
 
 	/*
@@ -276,7 +319,11 @@ static void signal_our_withdraw(struct gfs2_sbd *sdp)
 	 * Now wait until recovery is complete.
 	 */
 	for (tries = 0; tries < 10; tries++) {
+<<<<<<< HEAD
 		ret = check_journal_clean(sdp, sdp->sd_jdesc, false);
+=======
+		ret = check_journal_clean(sdp, sdp->sd_jdesc);
+>>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 		if (!ret)
 			break;
 		msleep(HZ);
