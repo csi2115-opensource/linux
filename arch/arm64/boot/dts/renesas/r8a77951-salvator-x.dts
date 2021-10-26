@@ -52,7 +52,6 @@
 	status = "okay";
 };
 
-<<<<<<< HEAD
 &hdmi0 {
 	status = "okay";
 
@@ -76,8 +75,6 @@
 	remote-endpoint = <&rcar_dw_hdmi0_out>;
 };
 
-=======
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 &hdmi1 {
 	status = "okay";
 
@@ -114,7 +111,6 @@
 
 &rcar_sound {
 	ports {
-<<<<<<< HEAD
 		/* rsnd_port0 is on salvator-common */
 		rsnd_port1: port@1 {
 			reg = <1>;
@@ -128,9 +124,6 @@
 				playback = <&ssi2>;
 			};
 		};
-=======
-		/* rsnd_port0/1 are described in salvator-common.dtsi */
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 		rsnd_port2: port@2 {
 			reg = <2>;
 			rsnd_endpoint2: endpoint {

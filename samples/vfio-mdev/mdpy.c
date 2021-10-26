@@ -269,17 +269,6 @@ static int mdpy_create(struct kobject *kobj, struct mdev_device *mdev)
 	mdpy_reset(mdev);
 
 	mdpy_count++;
-<<<<<<< HEAD
-=======
-
-	ret = vfio_register_group_dev(&mdev_state->vdev);
-	if (ret) {
-		kfree(mdev_state->vconfig);
-		kfree(mdev_state);
-		return ret;
-	}
-	dev_set_drvdata(&mdev->dev, mdev_state);
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 	return 0;
 }
 
@@ -633,11 +622,7 @@ static long mdpy_ioctl(struct mdev_device *mdev, unsigned int cmd,
 	return -ENOTTY;
 }
 
-<<<<<<< HEAD
 static int mdpy_open(struct mdev_device *mdev)
-=======
-static int mdpy_open(struct vfio_device *vdev)
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 {
 	if (!try_module_get(THIS_MODULE))
 		return -ENODEV;
@@ -645,11 +630,7 @@ static int mdpy_open(struct vfio_device *vdev)
 	return 0;
 }
 
-<<<<<<< HEAD
 static void mdpy_close(struct mdev_device *mdev)
-=======
-static void mdpy_close(struct vfio_device *vdev)
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 {
 	module_put(THIS_MODULE);
 }
@@ -744,29 +725,6 @@ static struct attribute_group *mdev_type_groups[] = {
 	NULL,
 };
 
-<<<<<<< HEAD
-=======
-static const struct vfio_device_ops mdpy_dev_ops = {
-	.open = mdpy_open,
-	.release = mdpy_close,
-	.read = mdpy_read,
-	.write = mdpy_write,
-	.ioctl = mdpy_ioctl,
-	.mmap = mdpy_mmap,
-};
-
-static struct mdev_driver mdpy_driver = {
-	.driver = {
-		.name = "mdpy",
-		.owner = THIS_MODULE,
-		.mod_name = KBUILD_MODNAME,
-		.dev_groups = mdev_dev_groups,
-	},
-	.probe = mdpy_probe,
-	.remove	= mdpy_remove,
-};
-
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 static const struct mdev_parent_ops mdev_fops = {
 	.owner			= THIS_MODULE,
 	.mdev_attr_groups	= mdev_dev_groups,

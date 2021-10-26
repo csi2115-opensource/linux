@@ -294,11 +294,7 @@ TRACE_EVENT(io_uring_fail_link,
  */
 TRACE_EVENT(io_uring_complete,
 
-<<<<<<< HEAD
 	TP_PROTO(void *ctx, u64 user_data, long res),
-=======
-	TP_PROTO(void *ctx, u64 user_data, long res, unsigned cflags),
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 
 	TP_ARGS(ctx, user_data, res),
 
@@ -306,10 +302,6 @@ TRACE_EVENT(io_uring_complete,
 		__field(  void *,	ctx		)
 		__field(  u64,		user_data	)
 		__field(  long,		res		)
-<<<<<<< HEAD
-=======
-		__field(  unsigned,	cflags		)
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 	),
 
 	TP_fast_assign(
@@ -318,11 +310,7 @@ TRACE_EVENT(io_uring_complete,
 		__entry->res		= res;
 	),
 
-<<<<<<< HEAD
 	TP_printk("ring %p, user_data 0x%llx, result %ld",
-=======
-	TP_printk("ring %p, user_data 0x%llx, result %ld, cflags %x",
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 			  __entry->ctx, (unsigned long long)__entry->user_data,
 			  __entry->res)
 );

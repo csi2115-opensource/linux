@@ -213,12 +213,7 @@ static int snd_opl3sa2_detect(struct snd_card *card)
 	char str[2];
 
 	port = chip->port;
-<<<<<<< HEAD
 	if ((chip->res_port = request_region(port, 2, "OPL3-SA control")) == NULL) {
-=======
-	chip->res_port = request_region(port, 2, "OPL3-SA control");
-	if (!chip->res_port) {
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 		snd_printk(KERN_ERR PFX "can't grab port 0x%lx\n", port);
 		return -EBUSY;
 	}
@@ -731,21 +726,11 @@ static int snd_opl3sa2_pnp_detect(struct pnp_dev *pdev,
 	err = snd_opl3sa2_card_new(&pdev->dev, dev, &card);
 	if (err < 0)
 		return err;
-<<<<<<< HEAD
 	if ((err = snd_opl3sa2_pnp(dev, card->private_data, pdev)) < 0) {
 		snd_card_free(card);
 		return err;
 	}
 	if ((err = snd_opl3sa2_probe(card, dev)) < 0) {
-=======
-	err = snd_opl3sa2_pnp(dev, card->private_data, pdev);
-	if (err < 0) {
-		snd_card_free(card);
-		return err;
-	}
-	err = snd_opl3sa2_probe(card, dev);
-	if (err < 0) {
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 		snd_card_free(card);
 		return err;
 	}
@@ -805,21 +790,11 @@ static int snd_opl3sa2_pnp_cdetect(struct pnp_card_link *pcard,
 	err = snd_opl3sa2_card_new(&pdev->dev, dev, &card);
 	if (err < 0)
 		return err;
-<<<<<<< HEAD
 	if ((err = snd_opl3sa2_pnp(dev, card->private_data, pdev)) < 0) {
 		snd_card_free(card);
 		return err;
 	}
 	if ((err = snd_opl3sa2_probe(card, dev)) < 0) {
-=======
-	err = snd_opl3sa2_pnp(dev, card->private_data, pdev);
-	if (err < 0) {
-		snd_card_free(card);
-		return err;
-	}
-	err = snd_opl3sa2_probe(card, dev);
-	if (err < 0) {
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 		snd_card_free(card);
 		return err;
 	}
@@ -895,12 +870,7 @@ static int snd_opl3sa2_isa_probe(struct device *pdev,
 	err = snd_opl3sa2_card_new(pdev, dev, &card);
 	if (err < 0)
 		return err;
-<<<<<<< HEAD
 	if ((err = snd_opl3sa2_probe(card, dev)) < 0) {
-=======
-	err = snd_opl3sa2_probe(card, dev);
-	if (err < 0) {
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 		snd_card_free(card);
 		return err;
 	}

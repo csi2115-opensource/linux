@@ -113,11 +113,7 @@ static int bnxt_hwrm_func_qcfg_flags(struct bnxt *bp, struct bnxt_vf_info *vf)
 	int rc;
 
 	bnxt_hwrm_cmd_hdr_init(bp, &req, HWRM_FUNC_QCFG, -1, -1);
-<<<<<<< HEAD
 	req.fid = cpu_to_le16(vf->fw_fid);
-=======
-	req.fid = cpu_to_le16(BNXT_PF(bp) ? vf->fw_fid : 0xffff);
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 	mutex_lock(&bp->hwrm_cmd_lock);
 	rc = _hwrm_send_message(bp, &req, sizeof(req), HWRM_CMD_TIMEOUT);
 	if (rc) {
@@ -640,11 +636,7 @@ static int bnxt_hwrm_func_cfg(struct bnxt *bp, int num_vfs)
 	vf_vnics = (hw_resc->max_vnics - bp->nr_vnics) / num_vfs;
 	vf_vnics = min_t(u16, vf_vnics, vf_rx_rings);
 
-<<<<<<< HEAD
 	req.enables = cpu_to_le32(FUNC_CFG_REQ_ENABLES_MTU |
-=======
-	req.enables = cpu_to_le32(FUNC_CFG_REQ_ENABLES_ADMIN_MTU |
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 				  FUNC_CFG_REQ_ENABLES_MRU |
 				  FUNC_CFG_REQ_ENABLES_NUM_RSSCOS_CTXS |
 				  FUNC_CFG_REQ_ENABLES_NUM_STAT_CTXS |
@@ -657,11 +649,7 @@ static int bnxt_hwrm_func_cfg(struct bnxt *bp, int num_vfs)
 
 	mtu = bp->dev->mtu + ETH_HLEN + VLAN_HLEN;
 	req.mru = cpu_to_le16(mtu);
-<<<<<<< HEAD
 	req.mtu = cpu_to_le16(mtu);
-=======
-	req.admin_mtu = cpu_to_le16(mtu);
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 
 	req.num_rsscos_ctxs = cpu_to_le16(1);
 	req.num_cmpl_rings = cpu_to_le16(vf_cp_rings);
@@ -1132,44 +1120,10 @@ void bnxt_hwrm_exec_fwd_req(struct bnxt *bp)
 	}
 }
 
-<<<<<<< HEAD
-=======
-int bnxt_approve_mac(struct bnxt *bp, u8 *mac, bool strict)
-{
-	struct hwrm_func_vf_cfg_input req = {0};
-	int rc = 0;
-
-	if (!BNXT_VF(bp))
-		return 0;
-
-	if (bp->hwrm_spec_code < 0x10202) {
-		if (is_valid_ether_addr(bp->vf.mac_addr))
-			rc = -EADDRNOTAVAIL;
-		goto mac_done;
-	}
-	bnxt_hwrm_cmd_hdr_init(bp, &req, HWRM_FUNC_VF_CFG, -1, -1);
-	req.enables = cpu_to_le32(FUNC_VF_CFG_REQ_ENABLES_DFLT_MAC_ADDR);
-	memcpy(req.dflt_mac_addr, mac, ETH_ALEN);
-	rc = hwrm_send_message(bp, &req, sizeof(req), HWRM_CMD_TIMEOUT);
-mac_done:
-	if (rc && strict) {
-		rc = -EADDRNOTAVAIL;
-		netdev_warn(bp->dev, "VF MAC address %pM not approved by the PF\n",
-			    mac);
-		return rc;
-	}
-	return 0;
-}
-
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 void bnxt_update_vf_mac(struct bnxt *bp)
 {
 	struct hwrm_func_qcaps_input req = {0};
 	struct hwrm_func_qcaps_output *resp = bp->hwrm_cmd_resp_addr;
-<<<<<<< HEAD
-=======
-	bool inform_pf = false;
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 
 	bnxt_hwrm_cmd_hdr_init(bp, &req, HWRM_FUNC_QCAPS, -1, -1);
 	req.fid = cpu_to_le16(0xffff);
@@ -1193,11 +1147,6 @@ void bnxt_update_vf_mac(struct bnxt *bp)
 		memcpy(bp->dev->dev_addr, bp->vf.mac_addr, ETH_ALEN);
 update_vf_mac_exit:
 	mutex_unlock(&bp->hwrm_cmd_lock);
-<<<<<<< HEAD
-=======
-	if (inform_pf)
-		bnxt_approve_mac(bp, bp->dev->dev_addr, false);
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 }
 
 int bnxt_approve_mac(struct bnxt *bp, u8 *mac, bool strict)

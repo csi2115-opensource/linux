@@ -771,7 +771,6 @@ static void icp_eoi(struct irq_chip *c, u32 hwirq, __be32 xirr, bool *again)
 	void __iomem *xics_phys;
 	int64_t rc;
 
-<<<<<<< HEAD
 	if (kvmhv_on_pseries()) {
 		unsigned long retbuf[PLPAR_HCALL_BUFSIZE];
 
@@ -780,8 +779,6 @@ static void icp_eoi(struct irq_chip *c, u32 hwirq, __be32 xirr, bool *again)
 		return;
 	}
 
-=======
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 	rc = pnv_opal_pci_msi_eoi(c, hwirq);
 
 	if (rc)

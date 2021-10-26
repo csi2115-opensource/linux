@@ -91,11 +91,7 @@ int gsi_trans_pool_init(struct gsi_trans_pool *pool, size_t size, u32 count,
 	void *virt;
 
 #ifdef IPA_VALIDATE
-<<<<<<< HEAD
 	if (!size || size % 8)
-=======
-	if (!size)
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 		return -EINVAL;
 	if (count < max_alloc)
 		return -EINVAL;
@@ -145,11 +141,7 @@ int gsi_trans_pool_init_dma(struct device *dev, struct gsi_trans_pool *pool,
 	void *virt;
 
 #ifdef IPA_VALIDATE
-<<<<<<< HEAD
 	if (!size || size % 8)
-=======
-	if (!size)
->>>>>>> parent of 515dcc2e0217... Merge tag 'dma-mapping-5.15-2' of git://git.infradead.org/users/hch/dma-mapping
 		return -EINVAL;
 	if (count < max_alloc)
 		return -EINVAL;

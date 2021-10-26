@@ -714,13 +714,8 @@ void mhi_device_put(struct mhi_device *mhi_dev);
 /**
  * mhi_prepare_for_transfer - Setup channel for data transfer
  * @mhi_dev: Device associated with the channels
- * @flags: MHI channel flags
  */
-int mhi_prepare_for_transfer(struct mhi_device *mhi_dev,
-			     unsigned int flags);
-
-/* Automatically allocate and queue inbound buffers */
-#define MHI_CH_INBOUND_ALLOC_BUFS BIT(0)
+int mhi_prepare_for_transfer(struct mhi_device *mhi_dev);
 
 /**
  * mhi_unprepare_from_transfer - Unprepare the channels

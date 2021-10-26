@@ -401,5 +401,3 @@ alpha_fp_emul_imprecise (struct pt_regs *regs, unsigned long write_mask)
 egress:
 	return si_code;
 }
-
-EXPORT_SYMBOL(__udiv_qrnnd);
