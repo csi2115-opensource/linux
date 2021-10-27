@@ -557,10 +557,6 @@ static int freeze_go_sync(struct gfs2_glock *gl)
 	int error = 0;
 	struct gfs2_sbd *sdp = gl->gl_name.ln_sbd;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	/*
 	 * We need to check gl_state == LM_ST_SHARED here and not gl_req ==
 	 * LM_ST_EXCLUSIVE. That's because when any node does a freeze,
@@ -574,16 +570,6 @@ static int freeze_go_sync(struct gfs2_glock *gl)
 	 */
 	if (gl->gl_state == LM_ST_SHARED && !gfs2_withdrawn(sdp) &&
 	    !test_bit(SDF_NORECOVERY, &sdp->sd_flags)) {
-=======
-=======
->>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
-=======
->>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
-=======
->>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
-	if (gl->gl_state == LM_ST_SHARED && !gfs2_withdrawn(sdp) &&
-	    test_bit(SDF_JOURNAL_LIVE, &sdp->sd_flags)) {
->>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 		atomic_set(&sdp->sd_freeze_state, SFS_STARTING_FREEZE);
 		error = freeze_super(sdp->sd_vfs);
 		if (error) {
@@ -591,23 +577,7 @@ static int freeze_go_sync(struct gfs2_glock *gl)
 				error);
 			if (gfs2_withdrawn(sdp)) {
 				atomic_set(&sdp->sd_freeze_state, SFS_UNFROZEN);
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 				return 0;
-=======
-				return;
->>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
-=======
-				return;
->>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
-=======
-				return;
->>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
-=======
-				return;
->>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 			}
 			gfs2_assert_withdraw(sdp, 0);
 		}
@@ -688,23 +658,11 @@ static void iopen_go_callback(struct gfs2_glock *gl, bool remote)
 	}
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 static int iopen_go_demote_ok(const struct gfs2_glock *gl)
 {
        return !gfs2_delete_work_queued(gl);
 }
 
-=======
->>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
-=======
->>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
-=======
->>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
-=======
->>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 /**
  * inode_go_free - wake up anyone waiting for dlm's unlock ast to free it
  * @gl: glock being freed
@@ -784,20 +742,7 @@ const struct gfs2_glock_operations gfs2_inode_glops = {
 	.go_lock = inode_go_lock,
 	.go_dump = inode_go_dump,
 	.go_type = LM_TYPE_INODE,
-<<<<<<< HEAD
 	.go_flags = GLOF_ASPACE | GLOF_LRU | GLOF_LVB,
-=======
-	.go_flags = GLOF_ASPACE | GLOF_LRU,
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
-=======
->>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
-=======
->>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
-=======
->>>>>>> 601ef0d52e96... gfs2: Force withdraw to replay journals and wait for it to finish
 	.go_free = inode_go_free,
 };
 
