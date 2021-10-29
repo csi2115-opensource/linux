@@ -781,12 +781,7 @@ static int io_wq_fork_manager(struct io_wq *wq)
 		wake_up_new_task(tsk);
 		return 0;
 	}
-
-<<<<<<< HEAD
-	return ret;
-=======
 	return PTR_ERR(tsk);
->>>>>>> v5.12-rc2
 }
 
 static void io_wqe_enqueue(struct io_wqe *wqe, struct io_wq_work *work)
