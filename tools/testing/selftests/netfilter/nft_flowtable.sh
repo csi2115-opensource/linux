@@ -332,4 +332,136 @@ else
 	ip netns exec nsr1 nft list ruleset
 fi
 
+<<<<<<< HEAD
+=======
+# Another test:
+# Add bridge interface br0 to Router1, with NAT enabled.
+ip -net nsr1 link add name br0 type bridge
+ip -net nsr1 addr flush dev veth0
+ip -net nsr1 link set up dev veth0
+ip -net nsr1 link set veth0 master br0
+ip -net nsr1 addr add 10.0.1.1/24 dev br0
+ip -net nsr1 addr add dead:1::1/64 dev br0
+ip -net nsr1 link set up dev br0
+
+ip netns exec nsr1 sysctl net.ipv4.conf.br0.forwarding=1 > /dev/null
+
+# br0 with NAT enabled.
+ip netns exec nsr1 nft -f - <<EOF
+flush table ip nat
+table ip nat {
+   chain prerouting {
+      type nat hook prerouting priority 0; policy accept;
+      meta iif "br0" ip daddr 10.6.6.6 tcp dport 1666 counter dnat ip to 10.0.2.99:12345
+   }
+
+   chain postrouting {
+      type nat hook postrouting priority 0; policy accept;
+      meta oifname "veth1" counter masquerade
+   }
+}
+EOF
+
+if test_tcp_forwarding_nat ns1 ns2; then
+	echo "PASS: flow offloaded for ns1/ns2 with bridge NAT"
+else
+	echo "FAIL: flow offload for ns1/ns2 with bridge NAT" 1>&2
+	ip netns exec nsr1 nft list ruleset
+	ret=1
+fi
+
+# Another test:
+# Add bridge interface br0 to Router1, with NAT and VLAN.
+ip -net nsr1 link set veth0 nomaster
+ip -net nsr1 link set down dev veth0
+ip -net nsr1 link add link veth0 name veth0.10 type vlan id 10
+ip -net nsr1 link set up dev veth0
+ip -net nsr1 link set up dev veth0.10
+ip -net nsr1 link set veth0.10 master br0
+
+ip -net ns1 addr flush dev eth0
+ip -net ns1 link add link eth0 name eth0.10 type vlan id 10
+ip -net ns1 link set eth0 up
+ip -net ns1 link set eth0.10 up
+ip -net ns1 addr add 10.0.1.99/24 dev eth0.10
+ip -net ns1 route add default via 10.0.1.1
+ip -net ns1 addr add dead:1::99/64 dev eth0.10
+
+if test_tcp_forwarding_nat ns1 ns2; then
+	echo "PASS: flow offloaded for ns1/ns2 with bridge NAT and VLAN"
+else
+	echo "FAIL: flow offload for ns1/ns2 with bridge NAT and VLAN" 1>&2
+	ip netns exec nsr1 nft list ruleset
+	ret=1
+fi
+
+# restore test topology (remove bridge and VLAN)
+ip -net nsr1 link set veth0 nomaster
+ip -net nsr1 link set veth0 down
+ip -net nsr1 link set veth0.10 down
+ip -net nsr1 link delete veth0.10 type vlan
+ip -net nsr1 link delete br0 type bridge
+ip -net ns1 addr flush dev eth0.10
+ip -net ns1 link set eth0.10 down
+ip -net ns1 link set eth0 down
+ip -net ns1 link delete eth0.10 type vlan
+
+# restore address in ns1 and nsr1
+ip -net ns1 link set eth0 up
+ip -net ns1 addr add 10.0.1.99/24 dev eth0
+ip -net ns1 route add default via 10.0.1.1
+ip -net ns1 addr add dead:1::99/64 dev eth0
+ip -net ns1 route add default via dead:1::1
+ip -net nsr1 addr add 10.0.1.1/24 dev veth0
+ip -net nsr1 addr add dead:1::1/64 dev veth0
+ip -net nsr1 link set up dev veth0
+
+KEY_SHA="0x"$(ps -xaf | sha1sum | cut -d " " -f 1)
+KEY_AES="0x"$(ps -xaf | md5sum | cut -d " " -f 1)
+SPI1=$RANDOM
+SPI2=$RANDOM
+
+if [ $SPI1 -eq $SPI2 ]; then
+	SPI2=$((SPI2+1))
+fi
+
+do_esp() {
+    local ns=$1
+    local me=$2
+    local remote=$3
+    local lnet=$4
+    local rnet=$5
+    local spi_out=$6
+    local spi_in=$7
+
+    ip -net $ns xfrm state add src $remote dst $me proto esp spi $spi_in  enc aes $KEY_AES  auth sha1 $KEY_SHA mode tunnel sel src $rnet dst $lnet
+    ip -net $ns xfrm state add src $me  dst $remote proto esp spi $spi_out enc aes $KEY_AES auth sha1 $KEY_SHA mode tunnel sel src $lnet dst $rnet
+
+    # to encrypt packets as they go out (includes forwarded packets that need encapsulation)
+    ip -net $ns xfrm policy add src $lnet dst $rnet dir out tmpl src $me dst $remote proto esp mode tunnel priority 1 action allow
+    # to fwd decrypted packets after esp processing:
+    ip -net $ns xfrm policy add src $rnet dst $lnet dir fwd tmpl src $remote dst $me proto esp mode tunnel priority 1 action allow
+
+}
+
+do_esp nsr1 192.168.10.1 192.168.10.2 10.0.1.0/24 10.0.2.0/24 $SPI1 $SPI2
+
+do_esp nsr2 192.168.10.2 192.168.10.1 10.0.2.0/24 10.0.1.0/24 $SPI2 $SPI1
+
+ip netns exec nsr1 nft delete table ip nat
+
+# restore default routes
+ip -net ns2 route del 192.168.10.1 via 10.0.2.1
+ip -net ns2 route add default via 10.0.2.1
+ip -net ns2 route add default via dead:2::1
+
+if test_tcp_forwarding ns1 ns2; then
+	echo "PASS: ipsec tunnel mode for ns1/ns2"
+else
+	echo "FAIL: ipsec tunnel mode for ns1/ns2"
+	ip netns exec nsr1 nft list ruleset 1>&2
+	ip netns exec nsr1 cat /proc/net/xfrm_stat 1>&2
+fi
+
+>>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 exit $ret

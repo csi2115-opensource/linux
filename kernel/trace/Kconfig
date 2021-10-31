@@ -135,10 +135,9 @@ config TRACING_SUPPORT
 	depends on STACKTRACE_SUPPORT
 	default y
 
-if TRACING_SUPPORT
-
 menuconfig FTRACE
 	bool "Tracers"
+	depends on TRACING_SUPPORT
 	default y if DEBUG_KERNEL
 	help
 	  Enable the kernel tracing infrastructure.
@@ -218,6 +217,11 @@ config DYNAMIC_FTRACE_WITH_DIRECT_CALLS
 	def_bool y
 	depends on DYNAMIC_FTRACE_WITH_REGS
 	depends on HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+
+config DYNAMIC_FTRACE_WITH_ARGS
+	def_bool y
+	depends on DYNAMIC_FTRACE
+	depends on HAVE_DYNAMIC_FTRACE_WITH_ARGS
 
 config FUNCTION_PROFILER
 	bool "Kernel function profiler"
@@ -390,6 +394,37 @@ config OSNOISE_TRACER
 	  To enable this tracer, echo in "osnoise" into the current_tracer
           file.
 
+<<<<<<< HEAD
+=======
+config TIMERLAT_TRACER
+	bool "Timerlat tracer"
+	select OSNOISE_TRACER
+	select GENERIC_TRACER
+	help
+	  The timerlat tracer aims to help the preemptive kernel developers
+	  to find sources of wakeup latencies of real-time threads.
+
+	  The tracer creates a per-cpu kernel thread with real-time priority.
+	  The tracer thread sets a periodic timer to wakeup itself, and goes
+	  to sleep waiting for the timer to fire. At the wakeup, the thread
+	  then computes a wakeup latency value as the difference between
+	  the current time and the absolute time that the timer was set
+	  to expire.
+
+	  The tracer prints two lines at every activation. The first is the
+	  timer latency observed at the hardirq context before the
+	  activation of the thread. The second is the timer latency observed
+	  by the thread, which is the same level that cyclictest reports. The
+	  ACTIVATION ID field serves to relate the irq execution to its
+	  respective thread execution.
+
+	  The tracer is build on top of osnoise tracer, and the osnoise:
+	  events can be used to trace the source of interference from NMI,
+	  IRQs and other threads. It also enables the capture of the
+	  stacktrace at the IRQ context, which helps to identify the code
+	  path that can cause thread delay.
+
+>>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 config MMIOTRACE
 	bool "Memory mapped IO tracing"
 	depends on HAVE_MMIOTRACE_SUPPORT && PCI
@@ -728,7 +763,7 @@ config TRACEPOINT_BENCHMARK
 	help
 	 This option creates the tracepoint "benchmark:benchmark_event".
 	 When the tracepoint is enabled, it kicks off a kernel thread that
-	 goes into an infinite loop (calling cond_sched() to let other tasks
+	 goes into an infinite loop (calling cond_resched() to let other tasks
 	 run), and calls the tracepoint. Each iteration will record the time
 	 it took to write to the tracepoint and the next iteration that
 	 data will be passed to the tracepoint itself. That is, the tracepoint
@@ -1004,6 +1039,3 @@ config HIST_TRIGGERS_DEBUG
           If unsure, say N.
 
 endif # FTRACE
-
-endif # TRACING_SUPPORT
-

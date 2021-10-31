@@ -2,9 +2,12 @@
 #include <linux/trace.h>
 
 #if defined(CONFIG_OSNOISE_TRACER) && defined(CONFIG_X86_LOCAL_APIC)
+<<<<<<< HEAD
 extern void osnoise_trace_irq_entry(int id);
 extern void osnoise_trace_irq_exit(int id, const char *desc);
 
+=======
+>>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 /*
  * trace_intel_irq_entry - record intel specific IRQ entry
  */
