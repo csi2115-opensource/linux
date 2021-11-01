@@ -331,6 +331,7 @@ int ice_init_rdma(struct ice_pf *pf)
 
 	/* Reserve vector resources */
 	ret = ice_reserve_rdma_qvector(pf);
+
 	if (ret < 0) {
 		dev_err(dev, "failed to reserve vectors for RDMA\n");
 		return ret;
