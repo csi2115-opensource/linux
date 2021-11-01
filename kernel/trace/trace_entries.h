@@ -385,8 +385,6 @@ FTRACE_ENTRY(osnoise, osnoise_entry,
 		 __entry->softirq_count,
 		 __entry->thread_count)
 );
-<<<<<<< HEAD
-=======
 
 FTRACE_ENTRY(timerlat, timerlat_entry,
 
@@ -403,4 +401,3 @@ FTRACE_ENTRY(timerlat, timerlat_entry,
 		 __entry->context,
 		 __entry->timer_latency)
 );
->>>>>>> 7968150f498654695aff9bce15b1243743f072e0
