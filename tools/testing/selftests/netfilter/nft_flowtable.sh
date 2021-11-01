@@ -283,20 +283,9 @@ ip -net ns2 route add 192.168.10.1 via 10.0.2.1
 # Same, but with NAT enabled.
 ip netns exec nsr1 nft -f - <<EOF
 table ip nat {
-<<<<<<< HEAD
-   chain prerouting {
-      type nat hook prerouting priority 0; policy accept;
-      meta iif "veth0" ip daddr 10.6.6.6 tcp dport 1666 counter dnat ip to 10.0.2.99:12345
-   }
-
-   chain postrouting {
-      type nat hook postrouting priority 0; policy accept;
-      meta oifname "veth1" counter masquerade
-=======
    chain postrouting {
       type nat hook postrouting priority 0; policy accept;
       meta oifname "veth1" masquerade
->>>>>>> 2de03b45236f... selftests: netfilter: add flowtable test script
    }
 }
 EOF
@@ -332,8 +321,6 @@ else
 	ip netns exec nsr1 nft list ruleset
 fi
 
-<<<<<<< HEAD
-=======
 # Another test:
 # Add bridge interface br0 to Router1, with NAT enabled.
 ip -net nsr1 link add name br0 type bridge
@@ -463,5 +450,4 @@ else
 	ip netns exec nsr1 cat /proc/net/xfrm_stat 1>&2
 fi
 
->>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 exit $ret

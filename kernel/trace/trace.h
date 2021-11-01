@@ -46,10 +46,7 @@ enum trace_type {
 	TRACE_BPUTS,
 	TRACE_HWLAT,
 	TRACE_OSNOISE,
-<<<<<<< HEAD
-=======
 	TRACE_TIMERLAT,
->>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 	TRACE_RAW_DATA,
 	TRACE_FUNC_REPEATS,
 
@@ -450,10 +447,7 @@ extern void __ftrace_bad_type(void);
 		IF_ASSIGN(var, ent, struct bputs_entry, TRACE_BPUTS);	\
 		IF_ASSIGN(var, ent, struct hwlat_entry, TRACE_HWLAT);	\
 		IF_ASSIGN(var, ent, struct osnoise_entry, TRACE_OSNOISE);\
-<<<<<<< HEAD
-=======
 		IF_ASSIGN(var, ent, struct timerlat_entry, TRACE_TIMERLAT);\
->>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 		IF_ASSIGN(var, ent, struct raw_data_entry, TRACE_RAW_DATA);\
 		IF_ASSIGN(var, ent, struct trace_mmiotrace_rw,		\
 			  TRACE_MMIO_RW);				\

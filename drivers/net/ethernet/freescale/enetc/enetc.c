@@ -2152,13 +2152,8 @@ int enetc_setup_tc(struct net_device *ndev, enum tc_setup_type type,
 	u8 num_tc;
 	int i;
 
-<<<<<<< HEAD
-	if (type != TC_SETUP_QDISC_MQPRIO)
-		return -EOPNOTSUPP;
-
-=======
 	num_stack_tx_queues = enetc_num_stack_tx_queues(priv);
->>>>>>> 7968150f498654695aff9bce15b1243743f072e0
+
 	mqprio->hw = TC_MQPRIO_HW_OFFLOAD_TCS;
 	num_tc = mqprio->num_tc;
 
@@ -2203,8 +2198,6 @@ int enetc_setup_tc(struct net_device *ndev, enum tc_setup_type type,
 	return 0;
 }
 
-<<<<<<< HEAD
-=======
 int enetc_setup_tc(struct net_device *ndev, enum tc_setup_type type,
 		   void *type_data)
 {
@@ -2272,7 +2265,6 @@ int enetc_setup_bpf(struct net_device *dev, struct netdev_bpf *xdp)
 	return 0;
 }
 
->>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 struct net_device_stats *enetc_get_stats(struct net_device *ndev)
 {
 	struct enetc_ndev_priv *priv = netdev_priv(ndev);

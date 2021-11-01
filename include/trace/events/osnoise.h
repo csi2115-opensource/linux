@@ -129,11 +129,7 @@ TRACE_EVENT(sample_threshold,
 		__entry->interference = interference;
 	),
 
-<<<<<<< HEAD
-	TP_printk("start %llu.%09u duration %llu ns interferences %llu",
-=======
 	TP_printk("start %llu.%09u duration %llu ns interference %llu",
->>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 		__print_ns_to_secs(__entry->start),
 		__print_ns_without_secs(__entry->start),
 		__entry->duration,
