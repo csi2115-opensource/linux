@@ -24,10 +24,8 @@ Linux Tracing Technologies
    boottime-trace
    hwlat_detector
    osnoise-tracer
-<<<<<<< HEAD
-=======
    timerlat-tracer
->>>>>>> 7968150f498654695aff9bce15b1243743f072e0
+
    intel_th
    ring-buffer-design
    stm

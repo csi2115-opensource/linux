@@ -44,19 +44,9 @@ static void hdcp2_message_init(struct mod_hdcp *hdcp,
 	in->process.msg3_desc.msg_id = TA_HDCP_HDCP2_MSG_ID__NULL_MESSAGE;
 	in->process.msg3_desc.msg_size = 0;
 }
-<<<<<<< HEAD
-#if defined(CONFIG_DRM_AMD_DC_DCN3_1)
-static enum mod_hdcp_status mod_hdcp_remove_display_from_topology_v2(
-		struct mod_hdcp *hdcp, uint8_t index)
-#else
-enum mod_hdcp_status mod_hdcp_remove_display_from_topology(
-		struct mod_hdcp *hdcp, uint8_t index)
-#endif
-=======
 
 static enum mod_hdcp_status remove_display_from_topology_v2(
 		struct mod_hdcp *hdcp, uint8_t index)
->>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 {
 	struct psp_context *psp = hdcp->config.psp.handle;
 	struct ta_dtm_shared_memory *dtm_cmd;
@@ -90,13 +80,8 @@ static enum mod_hdcp_status remove_display_from_topology_v2(
 	mutex_unlock(&psp->dtm_context.mutex);
 	return status;
 }
-<<<<<<< HEAD
-#if defined(CONFIG_DRM_AMD_DC_DCN3_1)
-static enum mod_hdcp_status mod_hdcp_remove_display_from_topology_v3(
-=======
 
 static enum mod_hdcp_status remove_display_from_topology_v3(
->>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 		struct mod_hdcp *hdcp, uint8_t index)
 {
 	struct psp_context *psp = hdcp->config.psp.handle;
@@ -105,11 +90,7 @@ static enum mod_hdcp_status remove_display_from_topology_v3(
 		get_active_display_at_index(hdcp, index);
 	enum mod_hdcp_status status = MOD_HDCP_STATUS_SUCCESS;
 
-<<<<<<< HEAD
-	dtm_cmd = (struct ta_dtm_shared_memory *)psp->dtm_context.dtm_shared_buf;
-=======
 	dtm_cmd = (struct ta_dtm_shared_memory *)psp->dtm_context.context.mem_context.shared_buf;
->>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 
 	if (!display || !is_display_active(display))
 		return MOD_HDCP_STATUS_DISPLAY_NOT_FOUND;
@@ -126,11 +107,7 @@ static enum mod_hdcp_status remove_display_from_topology_v3(
 	psp_dtm_invoke(psp, dtm_cmd->cmd_id);
 
 	if (dtm_cmd->dtm_status != TA_DTM_STATUS__SUCCESS) {
-<<<<<<< HEAD
-		status = mod_hdcp_remove_display_from_topology_v2(hdcp, index);
-=======
 		status = remove_display_from_topology_v2(hdcp, index);
->>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 		if (status != MOD_HDCP_STATUS_SUCCESS)
 			display->state = MOD_HDCP_DISPLAY_INACTIVE;
 	} else {
@@ -143,31 +120,8 @@ static enum mod_hdcp_status remove_display_from_topology_v3(
 	return status;
 }
 
-<<<<<<< HEAD
-enum mod_hdcp_status mod_hdcp_remove_display_from_topology(
-		struct mod_hdcp *hdcp, uint8_t index)
-{
-	enum mod_hdcp_status status = MOD_HDCP_STATUS_UPDATE_TOPOLOGY_FAILURE;
-
-	if (hdcp->config.psp.caps.dtm_v3_supported)
-		status = mod_hdcp_remove_display_from_topology_v3(hdcp, index);
-	else
-		status = mod_hdcp_remove_display_from_topology_v2(hdcp, index);
-
-	return status;
-}
-#endif
-#if defined(CONFIG_DRM_AMD_DC_DCN3_1)
-static enum mod_hdcp_status mod_hdcp_add_display_to_topology_v2(
-		struct mod_hdcp *hdcp, struct mod_hdcp_display *display)
-#else
-enum mod_hdcp_status mod_hdcp_add_display_to_topology(struct mod_hdcp *hdcp,
-					       struct mod_hdcp_display *display)
-#endif
-=======
 static enum mod_hdcp_status add_display_to_topology_v2(
 		struct mod_hdcp *hdcp, struct mod_hdcp_display *display)
->>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 {
 	struct psp_context *psp = hdcp->config.psp.handle;
 	struct ta_dtm_shared_memory *dtm_cmd;
@@ -213,12 +167,7 @@ static enum mod_hdcp_status add_display_to_topology_v2(
 	return status;
 }
 
-<<<<<<< HEAD
-#if defined(CONFIG_DRM_AMD_DC_DCN3_1)
-static enum mod_hdcp_status mod_hdcp_add_display_to_topology_v3(
-=======
 static enum mod_hdcp_status add_display_to_topology_v3(
->>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 		struct mod_hdcp *hdcp, struct mod_hdcp_display *display)
 {
 	struct psp_context *psp = hdcp->config.psp.handle;
@@ -226,21 +175,13 @@ static enum mod_hdcp_status add_display_to_topology_v3(
 	struct mod_hdcp_link *link = &hdcp->connection.link;
 	enum mod_hdcp_status status = MOD_HDCP_STATUS_SUCCESS;
 
-<<<<<<< HEAD
-	if (!psp->dtm_context.dtm_initialized) {
-=======
 	if (!psp->dtm_context.context.initialized) {
->>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 		DRM_INFO("Failed to add display topology, DTM TA is not initialized.");
 		display->state = MOD_HDCP_DISPLAY_INACTIVE;
 		return MOD_HDCP_STATUS_FAILURE;
 	}
 
-<<<<<<< HEAD
-	dtm_cmd = (struct ta_dtm_shared_memory *)psp->dtm_context.dtm_shared_buf;
-=======
 	dtm_cmd = (struct ta_dtm_shared_memory *)psp->dtm_context.context.mem_context.shared_buf;
->>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 
 	mutex_lock(&psp->dtm_context.mutex);
 	memset(dtm_cmd, 0, sizeof(struct ta_dtm_shared_memory));
@@ -266,11 +207,7 @@ static enum mod_hdcp_status add_display_to_topology_v3(
 	psp_dtm_invoke(psp, dtm_cmd->cmd_id);
 
 	if (dtm_cmd->dtm_status != TA_DTM_STATUS__SUCCESS) {
-<<<<<<< HEAD
-		status = mod_hdcp_add_display_to_topology_v2(hdcp, display);
-=======
 		status = add_display_to_topology_v2(hdcp, display);
->>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 		if (status != MOD_HDCP_STATUS_SUCCESS)
 			display->state = MOD_HDCP_DISPLAY_INACTIVE;
 	} else {
@@ -282,8 +219,6 @@ static enum mod_hdcp_status add_display_to_topology_v3(
 	return status;
 }
 
-<<<<<<< HEAD
-=======
 enum mod_hdcp_status mod_hdcp_remove_display_from_topology(
 		struct mod_hdcp *hdcp, uint8_t index)
 {
@@ -297,22 +232,12 @@ enum mod_hdcp_status mod_hdcp_remove_display_from_topology(
 	return status;
 }
 
->>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 enum mod_hdcp_status mod_hdcp_add_display_to_topology(struct mod_hdcp *hdcp,
 					       struct mod_hdcp_display *display)
 {
 	enum mod_hdcp_status status = MOD_HDCP_STATUS_SUCCESS;
 
 	if (hdcp->config.psp.caps.dtm_v3_supported)
-<<<<<<< HEAD
-		status = mod_hdcp_add_display_to_topology_v3(hdcp, display);
-	else
-		status = mod_hdcp_add_display_to_topology_v2(hdcp, display);
-
-	return status;
-}
-#endif
-=======
 		status = add_display_to_topology_v3(hdcp, display);
 	else
 		status = add_display_to_topology_v2(hdcp, display);
@@ -320,7 +245,6 @@ enum mod_hdcp_status mod_hdcp_add_display_to_topology(struct mod_hdcp *hdcp,
 	return status;
 }
 
->>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 enum mod_hdcp_status mod_hdcp_hdcp1_create_session(struct mod_hdcp *hdcp)
 {
 
