@@ -394,8 +394,6 @@ config OSNOISE_TRACER
 	  To enable this tracer, echo in "osnoise" into the current_tracer
           file.
 
-<<<<<<< HEAD
-=======
 config TIMERLAT_TRACER
 	bool "Timerlat tracer"
 	select OSNOISE_TRACER
@@ -424,7 +422,6 @@ config TIMERLAT_TRACER
 	  stacktrace at the IRQ context, which helps to identify the code
 	  path that can cause thread delay.
 
->>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 config MMIOTRACE
 	bool "Memory mapped IO tracing"
 	depends on HAVE_MMIOTRACE_SUPPORT && PCI
