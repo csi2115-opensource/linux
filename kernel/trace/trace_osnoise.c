@@ -1990,6 +1990,7 @@ static void osnoise_tracer_stop(struct trace_array *tr)
 
 static int osnoise_tracer_init(struct trace_array *tr)
 {
+
 	/* Only allow one instance to enable this */
 	if (osnoise_busy)
 		return -EBUSY;

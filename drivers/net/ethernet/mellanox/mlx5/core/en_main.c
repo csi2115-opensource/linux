@@ -1838,7 +1838,7 @@ static int mlx5e_open_queues(struct mlx5e_channel *c,
 	struct mlx5e_create_cq_param ccp;
 	int err;
 
-	c->irq_desc = irq_to_desc(irq);
+	mlx5e_build_create_cq_param(&ccp, c);
 
 	err = mlx5e_open_cq(c->priv, icocq_moder, &cparam->async_icosq.cqp, &ccp,
 			    &c->async_icosq.cq);
@@ -4905,7 +4905,8 @@ static void mlx5e_reset_channels(struct net_device *netdev)
 
 int mlx5e_attach_netdev(struct mlx5e_priv *priv)
 {
-	const struct mlx5e_profile *profile;
+	const bool take_rtnl = priv->netdev->reg_state == NETREG_REGISTERED;
+	const struct mlx5e_profile *profile = priv->profile;
 	int max_nch;
 	int err;
 
@@ -4915,6 +4916,10 @@ int mlx5e_attach_netdev(struct mlx5e_priv *priv)
 	max_nch = mlx5e_calc_max_nch(priv->mdev, priv->netdev, profile);
 	if (priv->channels.params.num_channels > max_nch) {
 		mlx5_core_warn(priv->mdev, "MLX5E: Reducing number of channels to %d\n", max_nch);
+		/* Reducing the number of channels - RXFH has to be reset, and
+		 * mlx5e_num_channels_changed below will build the RQT.
+		 */
+		priv->netdev->priv_flags &= ~IFF_RXFH_CONFIGURED;
 		priv->channels.params.num_channels = max_nch;
 		if (priv->channels.params.mqprio.mode == TC_MQPRIO_MODE_CHANNEL) {
 			mlx5_core_warn(priv->mdev, "MLX5E: Disabling MQPRIO channel mode\n");
