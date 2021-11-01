@@ -139,14 +139,21 @@ static void queue_process(struct work_struct *work)
 
 static void poll_one_napi(struct napi_struct *napi)
 {
-	int work;
+	int work = 0;
+
+	/* If we set this bit but see that it has already been set,
+	 * that indicates that napi has been disabled and we need
+	 * to abort this operation
+	 */
+	if (!test_bit(NAPI_STATE_SCHED, &napi->state))
+		return budget;
 
 	/* If we set this bit but see that it has already been set,
 	 * that indicates that napi has been disabled and we need
 	 * to abort this operation
 	 */
 	if (test_and_set_bit(NAPI_STATE_NPSVC, &napi->state))
-		return;
+		goto out;
 
 	/* We explicilty pass the polling call a budget of 0 to
 	 * indicate that we are clearing the Tx path only.
@@ -156,6 +163,9 @@ static void poll_one_napi(struct napi_struct *napi)
 	trace_napi_poll(napi, work, 0);
 
 	clear_bit(NAPI_STATE_NPSVC, &napi->state);
+
+out:
+	return budget - work;
 }
 
 static void poll_napi(struct net_device *dev)

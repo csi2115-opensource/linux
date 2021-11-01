@@ -1,6 +1,10 @@
 # SPDX-License-Identifier: GPL-2.0
 # Makefile for netfilter selftests
 
+<<<<<<< HEAD
+TEST_PROGS := nft_trans_stress.sh nft_nat.sh bridge_brouter.sh \
+	conntrack_icmp_related.sh nft_flowtable.sh
+=======
 TEST_PROGS := nft_trans_stress.sh nft_fib.sh nft_nat.sh bridge_brouter.sh \
 	conntrack_icmp_related.sh nft_flowtable.sh ipvs.sh \
 	nft_concat_range.sh nft_conntrack_helper.sh \
@@ -9,5 +13,6 @@ TEST_PROGS := nft_trans_stress.sh nft_fib.sh nft_nat.sh bridge_brouter.sh \
 
 LDLIBS = -lmnl
 TEST_GEN_FILES =  nf-queue
+>>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 
 include ../lib.mk

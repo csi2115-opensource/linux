@@ -45,8 +45,11 @@ int trace_array_destroy(struct trace_array *tr);
 /* For osnoise tracer */
 int osnoise_arch_register(void);
 void osnoise_arch_unregister(void);
+<<<<<<< HEAD
+=======
 void osnoise_trace_irq_entry(int id);
 void osnoise_trace_irq_exit(int id, const char *desc);
+>>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 
 #endif	/* CONFIG_TRACING */
 

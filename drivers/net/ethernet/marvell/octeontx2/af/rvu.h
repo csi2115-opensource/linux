@@ -742,9 +742,12 @@ int nix_aq_context_read(struct rvu *rvu, struct nix_hw *nix_hw,
 			struct nix_cn10k_aq_enq_req *aq_req,
 			struct nix_cn10k_aq_enq_rsp *aq_rsp,
 			u16 pcifunc, u8 ctype, u32 qidx);
+<<<<<<< HEAD
+=======
 int rvu_get_nix_blkaddr(struct rvu *rvu, u16 pcifunc);
 u32 convert_dwrr_mtu_to_bytes(u8 dwrr_mtu);
 u32 convert_bytes_to_dwrr_mtu(u32 bytes);
+>>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 
 /* NPC APIs */
 int rvu_npc_init(struct rvu *rvu);

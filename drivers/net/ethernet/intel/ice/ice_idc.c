@@ -250,6 +250,8 @@ static int ice_reserve_rdma_qvector(struct ice_pf *pf)
 }
 
 /**
+<<<<<<< HEAD
+=======
  * ice_adev_release - function to be mapped to AUX dev's release op
  * @dev: pointer to device to free
  */
@@ -321,6 +323,7 @@ void ice_unplug_aux_dev(struct ice_pf *pf)
 }
 
 /**
+>>>>>>> 7968150f498654695aff9bce15b1243743f072e0
  * ice_init_rdma - initializes PF for RDMA use
  * @pf: ptr to ice_pf
  */
@@ -331,10 +334,17 @@ int ice_init_rdma(struct ice_pf *pf)
 
 	/* Reserve vector resources */
 	ret = ice_reserve_rdma_qvector(pf);
+<<<<<<< HEAD
+	if (ret < 0)
+		dev_err(dev, "failed to reserve vectors for RDMA\n");
+
+	return ret;
+=======
 	if (ret < 0) {
 		dev_err(dev, "failed to reserve vectors for RDMA\n");
 		return ret;
 	}
 
 	return ice_plug_aux_dev(pf);
+>>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 }

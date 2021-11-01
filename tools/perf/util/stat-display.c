@@ -18,8 +18,11 @@
 #include <api/fs/fs.h>
 #include "util.h"
 #include "iostat.h"
+<<<<<<< HEAD
+=======
 #include "pmu-hybrid.h"
 #include "evlist-hybrid.h"
+>>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 
 #define CNTR_NOT_SUPPORTED	"<not supported>"
 #define CNTR_NOT_COUNTED	"<not counted>"

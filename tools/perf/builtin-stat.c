@@ -70,7 +70,10 @@
 #include "util/pfm.h"
 #include "util/bpf_counter.h"
 #include "util/iostat.h"
+<<<<<<< HEAD
+=======
 #include "util/pmu-hybrid.h"
+>>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 #include "asm/bug.h"
 
 #include <linux/time64.h>
@@ -2408,8 +2411,11 @@ int cmd_stat(int argc, const char **argv)
 			goto out;
 		} else if (verbose)
 			iostat_list(evsel_list, &stat_config);
+<<<<<<< HEAD
+=======
 		if (iostat_mode == IOSTAT_RUN && !target__has_cpu(&target))
 			target.system_wide = true;
+>>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 	}
 
 	if (add_default_attributes())

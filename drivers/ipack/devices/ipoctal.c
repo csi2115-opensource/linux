@@ -671,6 +671,15 @@ static void ipoctal_cleanup(struct tty_struct *tty)
 	ipack_put_carrier(ipoctal->dev);
 }
 
+static void ipoctal_cleanup(struct tty_struct *tty)
+{
+	struct ipoctal_channel *channel = tty->driver_data;
+	struct ipoctal *ipoctal = chan_to_ipoctal(channel, tty->index);
+
+	/* release the carrier driver */
+	ipack_put_carrier(ipoctal->dev);
+}
+
 static const struct tty_operations ipoctal_fops = {
 	.ioctl =		NULL,
 	.install =		ipoctal_install,

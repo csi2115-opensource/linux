@@ -2820,6 +2820,8 @@ static irqreturn_t ice_misc_intr(int __always_unused irq, void *data)
 		}
 	}
 
+<<<<<<< HEAD
+=======
 	if (oicr & PFINT_OICR_TSYN_TX_M) {
 		ena_mask &= ~PFINT_OICR_TSYN_TX_M;
 		ice_ptp_process_ts(pf);
@@ -2837,6 +2839,7 @@ static irqreturn_t ice_misc_intr(int __always_unused irq, void *data)
 		kthread_queue_work(pf->ptp.kworker, &pf->ptp.extts_work);
 	}
 
+>>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 #define ICE_AUX_CRIT_ERR (PFINT_OICR_PE_CRITERR_M | PFINT_OICR_HMC_ERR_M | PFINT_OICR_PE_PUSH_M)
 	if (oicr & ICE_AUX_CRIT_ERR) {
 		struct iidc_event *event;
@@ -6572,6 +6575,8 @@ event_after:
 	kfree(event);
 
 	return err;
+<<<<<<< HEAD
+=======
 }
 
 /**
@@ -6593,6 +6598,7 @@ static int ice_eth_ioctl(struct net_device *netdev, struct ifreq *ifr, int cmd)
 	default:
 		return -EOPNOTSUPP;
 	}
+>>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 }
 
 /**

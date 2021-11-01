@@ -1306,6 +1306,8 @@ static struct trace_event trace_osnoise_event = {
 	.funcs		= &trace_osnoise_funcs,
 };
 
+<<<<<<< HEAD
+=======
 /* TRACE_TIMERLAT */
 static enum print_line_t
 trace_timerlat_print(struct trace_iterator *iter, int flags,
@@ -1352,6 +1354,7 @@ static struct trace_event trace_timerlat_event = {
 	.funcs		= &trace_timerlat_funcs,
 };
 
+>>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 /* TRACE_BPUTS */
 static enum print_line_t
 trace_bputs_print(struct trace_iterator *iter, int flags,
@@ -1563,7 +1566,10 @@ static struct trace_event *events[] __initdata = {
 	&trace_print_event,
 	&trace_hwlat_event,
 	&trace_osnoise_event,
+<<<<<<< HEAD
+=======
 	&trace_timerlat_event,
+>>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 	&trace_raw_data_event,
 	&trace_func_repeats_event,
 	NULL

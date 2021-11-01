@@ -4743,14 +4743,21 @@ static int nix_setup_ipolicers(struct rvu *rvu,
 	return 0;
 }
 
+<<<<<<< HEAD
+static void nix_ipolicer_freemem(struct nix_hw *nix_hw)
+=======
 static void nix_ipolicer_freemem(struct rvu *rvu, struct nix_hw *nix_hw)
+>>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 {
 	struct nix_ipolicer *ipolicer;
 	int layer;
 
+<<<<<<< HEAD
+=======
 	if (!rvu->hw->cap.ipolicer)
 		return;
 
+>>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 	for (layer = 0; layer < BAND_PROF_NUM_LAYERS; layer++) {
 		ipolicer = &nix_hw->ipolicer[layer];
 
@@ -5173,6 +5180,8 @@ static void nix_clear_ratelimit_aggr(struct rvu *rvu, struct nix_hw *nix_hw,
 		rvu_free_rsrc(&ipolicer->band_prof, mid_prof);
 	}
 }
+<<<<<<< HEAD
+=======
 
 int rvu_mbox_handler_nix_bandprof_get_hwinfo(struct rvu *rvu, struct msg_req *req,
 					     struct nix_bandprof_get_hwinfo_rsp *rsp)
@@ -5206,3 +5215,4 @@ int rvu_mbox_handler_nix_bandprof_get_hwinfo(struct rvu *rvu, struct msg_req *re
 
 	return 0;
 }
+>>>>>>> 7968150f498654695aff9bce15b1243743f072e0

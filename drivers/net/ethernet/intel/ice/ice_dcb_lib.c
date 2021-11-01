@@ -316,10 +316,15 @@ int ice_pf_dcb_cfg(struct ice_pf *pf, struct ice_dcbx_cfg *new_cfg, bool locked)
 
 	/* Notify AUX drivers about impending change to TCs */
 	event = kzalloc(sizeof(*event), GFP_KERNEL);
+<<<<<<< HEAD
+	if (!event)
+		return -ENOMEM;
+=======
 	if (!event) {
 		ret = -ENOMEM;
 		goto free_cfg;
 	}
+>>>>>>> 7968150f498654695aff9bce15b1243743f072e0
 
 	set_bit(IIDC_EVENT_BEFORE_TC_CHANGE, event->type);
 	ice_send_event_to_aux(pf, event);
