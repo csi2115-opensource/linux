@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
+
 /* Copyright 2017-2019 NXP */
 
 #include "enetc.h"
@@ -49,7 +50,8 @@ enetc_tx_swbd_get_xdp_frame(struct enetc_tx_swbd *tx_swbd)
 static void enetc_unmap_tx_buff(struct enetc_bdr *tx_ring,
 				struct enetc_tx_swbd *tx_swbd)
 {
-	/* For XDP_TX, pages come from RX, whereas for the other contexts where
+	/* For XDP_TX, pages come from RX, whereas for the other contexts where  
+	* 
 	 * we have is_dma_page_set, those come from skb_frag_dma_map. We need
 	 * to match the DMA mapping length, so we need to differentiate those.
 	 */
